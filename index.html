@@ -4,8 +4,57 @@
     <title>Virtual Nile Client Test</title>
   </head>
   <body>
-    <div class="container" ng-app="awsiot.sample" ng-controller="AppController as vm">
+    <div>
       <h1>Create Dream</h1>
+      <form id="create_dream_form">
+        <input type="hidden" name="location_id" value="babas_pdx_bethany">
+        <input type="hidden" name="user_id" value="1234567890">
+        <label for="email">email:</label>
+        <input type="text" name="email" value="bob@example.com" placeholder="bob@example.com">
+        <br>
+        <label for="screen_name">screen name:</label>
+        <input type="text" name="screen_name" value="bob" placeholder="bob">
+        <br>
+        <label for="dream_text">dream text:</label>
+        <br>
+        <textarea name="dream_text" rows="4" cols="50" placeholder="dream text">It was a dark and stormy night...</textarea>
+        <br><br>
+        <input id="create_dream_button" type="button" value="Create">
+      </form>
+      <pre id="create_dream_response"></pre>
     </div>
   </body>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    console.log("ready!");
+
+    $("#create_dream_button").click(function() {
+      console.log("create dream!");
+
+      // prepare request JSON
+      var arr = $("#create_dream_form").serializeArray();
+      var obj = {};
+      for(var xa=0; xa<arr.length; xa++) { obj[arr[xa].name] = arr[xa].value; }
+
+      console.log(JSON.stringify(obj));
+      $.ajax({
+        type: "POST",
+        url: "https://api.babasmg.com/nile/dreams",
+        data: JSON.stringify(obj),
+        success: function(data){
+          $("#create_dream_response").text(JSON.stringify(data,null,2));
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          $("#create_dream_response").text(jqXHR.status + " " + jqXHR.responseText);
+        },
+        contentType: 'application/json'
+      });
+
+    });
+
+  });
+  </script>
 </html>
