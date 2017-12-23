@@ -4,6 +4,7 @@
     <title>Virtual Nile Client Test</title>
   </head>
   <body>
+
     <div>
       <h1>Create Dream</h1>
       <form id="create_dream_form">
@@ -19,10 +20,20 @@
         <br>
         <textarea name="dream_text" rows="4" cols="50" placeholder="dream text">It was a dark and stormy night...</textarea>
         <br><br>
-        <input id="create_dream_button" type="button" value="Create">
+        <input id="create_dream_button" type="button" value="Create Dream">
       </form>
       <pre id="create_dream_response"></pre>
     </div>
+
+    <div>
+      <h1>Get Dream Discount</h1>
+      <label for="dream_id">dream ID:</label>
+      <input type="text" name="dream_id" value="" placeholder="valid dream ID">
+      <br><br>
+      <input id="get_dream_discount_button" type="button" value="Get Discount">
+      <pre id="get_dream_discount_response"></pre>
+    </div>
+
   </body>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"
     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -31,29 +42,57 @@
   $(document).ready(function() {
     console.log("ready!");
 
+    // create dream
     $("#create_dream_button").click(function() {
-      console.log("create dream!");
+      console.log("creating dream...");
+      $("#create_dream_response").text("creating dream...");
 
       // prepare request JSON
       var arr = $("#create_dream_form").serializeArray();
       var obj = {};
       for(var xa=0; xa<arr.length; xa++) { obj[arr[xa].name] = arr[xa].value; }
-
       console.log(JSON.stringify(obj));
+
+      // make AJAX request
       $.ajax({
         type: "POST",
         url: "https://api.babasmg.com/nile/dreams",
         data: JSON.stringify(obj),
-        success: function(data){
+        success: function(data) {
+          console.log("success");
           $("#create_dream_response").text(JSON.stringify(data,null,2));
+          $("input[name='dream_id']").val(data.dream_id);
         },
         error: function(jqXHR, textStatus, errorThrown) {
+          console.log("error");
           $("#create_dream_response").text(jqXHR.status + " " + jqXHR.responseText);
         },
         contentType: 'application/json'
       });
 
-    });
+    }); // end create dream button click handler
+
+    // get dream discount
+    $("#get_dream_discount_button").click(function() {
+      console.log("getting dream discount...");
+      $("#get_dream_discount_response").text("getting discount...");
+
+      // make AJAX request
+      $.ajax({
+        type: "GET",
+        url: "https://api.babasmg.com/nile/discounts/" + $("input[name='dream_id']").val(),
+        success: function(data) {
+          console.log("success");
+          $("#get_dream_discount_response").text(JSON.stringify(data,null,2));
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log("error");
+          console.log(jqXHR);
+          $("#get_dream_discount_response").text(JSON.stringify(jqXHR,null,2));
+        }
+      });
+
+    }); // end get dream discount button click handler
 
   });
   </script>
