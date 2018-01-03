@@ -40,15 +40,16 @@
 }
 
 .Page-evergreen-button {
-  position:fixed;
+  position: fixed;
+  width: 90%;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.Page-next-button {
-  -webkit-border-radius: 5;
-  -moz-border-radius: 5;
+.Page-large-next-button {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
   border-radius: 5px;
   font-family: LuloCleanOneBold, sans-serif;
   color: #ffffff;
@@ -59,6 +60,45 @@
   border: none;
 }
 
-.Page-next-button:hover {
+.Page-large-next-button:hover {
+  text-decoration: none;
+}
+
+.PageStatusBar {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #BFBFBF;
+  padding: 10px;
+}
+
+.PageStatusBar-progressbar {
+  position: absolute;
+  background: goldenrod;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.PageStatusBar-buttons {
+  float: right;
+}
+
+.PageStatusBar-button {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  font-family: LuloCleanOne, sans-serif;
+  color: #ffffff;
+  font-size: 40px;
+  background: #676867;
+  padding: 5px 15px 5px 15px;
+  text-decoration: none;
+  border: none;
+  margin-right: 10px;
+}
+
+.PageStatusBar-button:hover {
   text-decoration: none;
 }

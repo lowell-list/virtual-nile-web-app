@@ -6,6 +6,7 @@ import babas_logo from './img/babas_logo.png';
 // page IDs
 const PID_1_1_LANDING             = '1.1-landing';
 const PID_3_1_ENTER_NAME          = '3.1-enter-name';
+const PID_4_1_ENTER_EMAIL         = '4.1-enter-email';
 
 // local storage keys
 
@@ -68,7 +69,15 @@ function CurrentPage(props) {
 
   switch(currentPageId) {
     case PID_3_1_ENTER_NAME:
-      return <PageEnterName />;
+      return <PageEnterName
+        onPreviousClick={() => onPageIdSelected(PID_1_1_LANDING) }
+        onNextClick={() => onPageIdSelected(PID_4_1_ENTER_EMAIL) }
+      />;
+    case PID_4_1_ENTER_EMAIL:
+      return <PageEnterEmail
+        onPreviousClick={() => onPageIdSelected(PID_3_1_ENTER_NAME) }
+        onNextClick={() => console.log("There is no next page yet.") }
+      />;
     case PID_1_1_LANDING:
     default:
       return <PageLanding
@@ -92,7 +101,7 @@ class PageLanding extends Component {
         <p className="Page-normal-text">Eos populo delenit repudiandae id, in eripuit imperdiet mel, iuvaret dolores vis id. Menandri scripserit sed in, eam in mollis expetenda repudiandae. Ne eros error hendrerit mea. Ut usu libris virtute. At enim falli accommodare vis.</p>
         <p className="Page-normal-text">Ut modo aeterno concludaturque pri, eu voluptua ullamcorper sit. Eu sea elitr constituto, vel cibo alterum inermis te. Omnium nostrum ne mea. Ut vis summo choro animal, pri cu ullum cetero eripuit.</p>
         <p className="Page-normal-text">Mea eu augue omnium timeam, eu salutatus disputationi vel, id wisi saepe delicata has. An eum odio inermis. Quo nibh intellegat interesset an. Soluta prompta cu per, ut quidam bonorum epicurei sit.</p>
-        <button className="Page-next-button Page-evergreen-button" onClick={this.props.onStartClick}>Start!</button>
+        <button className="Page-large-next-button Page-evergreen-button" onClick={this.props.onStartClick}>Start!</button>
       </div>
     );
   }
@@ -100,16 +109,29 @@ class PageLanding extends Component {
 
 class PageEnterName extends Component {
 
-  constructor(props) {
-    super(props);
-    console.log("page props: " + props);
-  }
-
   render() {
     return (
       <div className="Page">
         <p className="Page-Header-1">What's your name?</p>
-        <PageStatusBar />
+        <PageStatusBar
+          onPreviousClick={this.props.onPreviousClick}
+          onNextClick={this.props.onNextClick}
+        />
+      </div>
+    );
+  }
+}
+
+class PageEnterEmail extends Component {
+
+  render() {
+    return (
+      <div className="Page">
+        <p className="Page-Header-1">What's your email?</p>
+        <PageStatusBar
+          onPreviousClick={this.props.onPreviousClick}
+          onNextClick={this.props.onNextClick}
+        />
       </div>
     );
   }
@@ -118,8 +140,13 @@ class PageEnterName extends Component {
 function PageStatusBar(props) {
   return (
     <div className="PageStatusBar">
-      <button className="PageStatusBar-previous-button" onClick={props.onPreviousClick}>∧</button>
-      <button className="PageStatusBar-next-button" onClick={props.onNextClick}>∨</button>
+      <div className="PageStatusBar-progressbar">
+        {/* TODO: add progressbar here */}
+      </div>
+      <div className="PageStatusBar-buttons">
+        <button className="PageStatusBar-button" onClick={props.onPreviousClick}>∧</button>
+        <button className="PageStatusBar-button" onClick={props.onNextClick}>∨</button>
+      </div>
     </div>
   )
 }
