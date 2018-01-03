@@ -1,0 +1,24 @@
+.Page {
+  width: 90%;
+  padding-left:5%;
+  padding-right:5%;
+}
+
+.Page-video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 0px;
+  padding-bottom: 56.25%;
+}
+
+.Page-video {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+.Page-next-button {
+  color: gold;
+}
