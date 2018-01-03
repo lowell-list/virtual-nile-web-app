@@ -1,24 +1,64 @@
+@font-face {
+  font-family: LuloCleanOneBold;
+  src: url('./font/Lulo_Clean_One_Bold.otf');
+}
+
+@font-face {
+  font-family: LuloCleanOne;
+  src: url('./font/Lulo_Clean_One.otf');
+}
+
 .Page {
   width: 90%;
   padding-left:5%;
   padding-right:5%;
 }
 
+.Page-Header-1 {
+  font-family: LuloCleanOneBold, sans-serif;
+  color: #24bab5;
+}
+
+.Page-normal-text {
+  font-family: LuloCleanOne, sans-serif;
+  font-size: 12px;
+}
+
 .Page-video-wrapper {
   position: relative;
   width: 100%;
-  height: 0px;
+  height: 0;
   padding-bottom: 56.25%;
 }
 
 .Page-video {
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
 }
 
+.Page-evergreen-button {
+  position:fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .Page-next-button {
-  color: gold;
+  -webkit-border-radius: 5;
+  -moz-border-radius: 5;
+  border-radius: 5px;
+  font-family: LuloCleanOneBold, sans-serif;
+  color: #ffffff;
+  font-size: 20px;
+  background: #24bab5;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  border: none;
+}
+
+.Page-next-button:hover {
+  text-decoration: none;
 }
