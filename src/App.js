@@ -3,13 +3,40 @@ import './App.css';
 import './Page.css';
 import babas_logo from './img/babas_logo.png';
 
+// page IDs
+const PID_1_1_LANDING             = '1.1-landing';
+const PID_3_1_ENTER_NAME          = '3.1-enter-name';
+
+// local storage keys
+
+// session storage keys
+const SSK_CURRENT_PAGE_ID         = 'currentPageId';
+
 class App extends Component {
 
   constructor(props) {
     super(props);
+
+    // determine current page ID
+    let currentPageId = PID_1_1_LANDING;
+      let cachedCurrentPageId = sessionStorage.getItem(SSK_CURRENT_PAGE_ID);
+    if(cachedCurrentPageId!=null) {
+      currentPageId = cachedCurrentPageId;
+      console.log("using cached current page ID: " + currentPageId);
+    }
+
+    // determine location ID from query string
+    let locationId = 'babas_pdx_cascade';
+    let urlParams = new URLSearchParams(window.location.search);
+    let queryLocationId = urlParams.get('locationId');
+    if(queryLocationId!=null) {
+      locationId = queryLocationId;
+      console.log("using location ID from query string: " + queryLocationId);
+    }
+
     this.state = {
-      currentPageId: "1.1-landing",
-      locationId: "babas_pdx_cascade", // TODO: set this from query string
+      currentPageId: currentPageId,
+      locationId: locationId,
     };
   }
 
@@ -29,6 +56,7 @@ class App extends Component {
     this.setState({
       currentPageId: pageId
     });
+    sessionStorage.setItem(SSK_CURRENT_PAGE_ID,pageId);
   }
 }
 
@@ -39,12 +67,12 @@ function CurrentPage(props) {
   const onPageIdSelected = props.onPageIdSelected;
 
   switch(currentPageId) {
-    case "3.1-enter-name":
+    case PID_3_1_ENTER_NAME:
       return <PageEnterName />;
-    case "1.1-landing":
+    case PID_1_1_LANDING:
     default:
       return <PageLanding
-        onStartClick={() => onPageIdSelected("3.1-enter-name") }
+        onStartClick={() => onPageIdSelected(PID_3_1_ENTER_NAME) }
       />;
   }
 }
@@ -81,9 +109,19 @@ class PageEnterName extends Component {
     return (
       <div className="Page">
         <p className="Page-Header-1">What's your name?</p>
+        <PageStatusBar />
       </div>
     );
   }
+}
+
+function PageStatusBar(props) {
+  return (
+    <div className="PageStatusBar">
+      <button className="PageStatusBar-previous-button" onClick={props.onPreviousClick}>∧</button>
+      <button className="PageStatusBar-next-button" onClick={props.onNextClick}>∨</button>
+    </div>
+  )
 }
 
 export default App;
