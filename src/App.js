@@ -4,21 +4,52 @@ import './Page.css';
 import babas_logo from './img/babas_logo.png';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Page11 onStartClick={() => { console.log("button clicked."); } }/>
-      </div>
-    );
-  }
-}
-
-class Page11 extends Component {
 
   constructor(props) {
     super(props);
-    console.log("page props: " + props);
+    this.state = {
+      currentPageId: "1.1-landing",
+      locationId: "babas_pdx_cascade", // TODO: set this from query string
+    };
   }
+
+  render() {
+    return (
+      <div className="App">
+        <CurrentPage
+          currentPageId={this.state.currentPageId}
+          onPageIdSelected={(pageId) => this.handlePageIdSelected(pageId)}
+        />
+      </div>
+    );
+  }
+
+  handlePageIdSelected(pageId) {
+    console.log("page selected: " + pageId);
+    this.setState({
+      currentPageId: pageId
+    });
+  }
+}
+
+/** returns the current Page based on the current page ID */
+function CurrentPage(props) {
+
+  const currentPageId = props.currentPageId;
+  const onPageIdSelected = props.onPageIdSelected;
+
+  switch(currentPageId) {
+    case "3.1-enter-name":
+      return <PageEnterName />;
+    case "1.1-landing":
+    default:
+      return <PageLanding
+        onStartClick={() => onPageIdSelected("3.1-enter-name") }
+      />;
+  }
+}
+
+class PageLanding extends Component {
 
   render() {
     return (
@@ -34,6 +65,22 @@ class Page11 extends Component {
         <p className="Page-normal-text">Ut modo aeterno concludaturque pri, eu voluptua ullamcorper sit. Eu sea elitr constituto, vel cibo alterum inermis te. Omnium nostrum ne mea. Ut vis summo choro animal, pri cu ullum cetero eripuit.</p>
         <p className="Page-normal-text">Mea eu augue omnium timeam, eu salutatus disputationi vel, id wisi saepe delicata has. An eum odio inermis. Quo nibh intellegat interesset an. Soluta prompta cu per, ut quidam bonorum epicurei sit.</p>
         <button className="Page-next-button Page-evergreen-button" onClick={this.props.onStartClick}>Start!</button>
+      </div>
+    );
+  }
+}
+
+class PageEnterName extends Component {
+
+  constructor(props) {
+    super(props);
+    console.log("page props: " + props);
+  }
+
+  render() {
+    return (
+      <div className="Page">
+        <p className="Page-Header-1">What's your name?</p>
       </div>
     );
   }
