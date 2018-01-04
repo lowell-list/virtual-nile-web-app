@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import InputWithButton from './InputWithButton.js';
 import './App.css';
 import './Page.css';
 import './InputWithButton.css';
@@ -110,21 +111,45 @@ class PageLanding extends Component {
 
 class PageEnterName extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputHasFocus: false
+    };
+    this.mTimeout = 0;
+  }
+
   render() {
     return (
       <div className="Page">
 
         <div className="Page-Question">
           <div className="Page-Question-Header">What's your name?</div>
-          <InputWithButton />
+          <InputWithButton
+            onFocus={() => this.setInputHasFocus(true,0) }
+            onBlur={() => this.setInputHasFocus(false,500) }
+          />
         </div>
         <PageStatusBar
-          hide={false}
+          hide={this.state.inputHasFocus}
           onPreviousClick={this.props.onPreviousClick}
           onNextClick={this.props.onNextClick}
         />
       </div>
     );
+  }
+
+  setInputHasFocus(newValue, delayMillis)
+  {
+    clearTimeout(this.mTimeout);
+    if(delayMillis===0) {
+      this.setState({inputHasFocus: newValue});
+    }
+    else {
+      this.mTimeout = setTimeout(() => {
+        this.setState({inputHasFocus: newValue});
+      },delayMillis);
+    }
   }
 }
 
@@ -158,44 +183,6 @@ function PageStatusBar(props) {
       </div>
     </div>
   )
-}
-
-class InputWithButton extends Component
-{
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputFocused: false
-    };
-  }
-
-  render() {
-    return (
-      <div className="InputWithButton">
-        <input type="text" className="InputWithButton-Input" size="10"
-               onFocus={() => this.onInputFocus()}
-               onBlur={() => this.onInputBlur()}
-               onInput={() => this.onInputInput()}
-        />
-        <input type="button" className="InputWithButton-Button"
-               value="OK"
-               // style={{visibility:(this.state.inputFocused?'visible':'hidden')}}
-        />
-      </div>
-    )
-  }
-
-  onInputFocus() {
-    this.setState({inputFocused:true});
-  }
-
-  onInputBlur() {
-    this.setState({inputFocused:false});
-  }
-
-  onInputInput() {
-    console.log("thanks for the input");
-  }
 }
 
 export default App;

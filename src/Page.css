@@ -1,13 +1,3 @@
-@font-face {
-  font-family: LuloCleanOneBold;
-  src: url('./font/Lulo_Clean_One_Bold.otf');
-}
-
-@font-face {
-  font-family: LuloCleanOne;
-  src: url('./font/Lulo_Clean_One.otf');
-}
-
 .Page {
   display: block;
   padding: 20px;
@@ -110,7 +100,7 @@
   font-family: LuloCleanOneBold, sans-serif;
   font-size: 14pt;
   color: #24bab5;
-  padding-top:150px;
+  padding-top:110px;
   padding-bottom:10px;
   text-align: center;
 }

@@ -1,37 +1,41 @@
-@font-face {
-  font-family: LuloCleanOneBold;
-  src: url('./font/Lulo_Clean_One_Bold.otf');
-}
-
-@font-face {
-  font-family: LuloCleanOne;
-  src: url('./font/Lulo_Clean_One.otf');
-}
-
 .InputWithButton {
   display: block;
-  box-sizing: border-box;
-  width: 100%;
 }
 
 .InputWithButton-Input {
   display: block;
   box-sizing: border-box;
   width: 100%;
+  padding: 20px 10px;
 
-  padding: 10px;
-  font-size: 16px;
-  border: #22BBB4 4px solid;
   background-color: #FFFFFF;
-  color: #000000;
+  border: #22BBB4 2px solid;
   border-radius: 0;
   font-family: LuloCleanOne, sans-serif;
+  font-size: 16px;
+  color: #000000;
 }
 
 .InputWithButton-Button {
   position: relative;
   display: block;
-  right: 15px;
+  /* this is a hack; would prefer a solution that vertical-centers the button on the input */
+  top: -54px;
+  right: 14px;
   margin-left: auto;
-  top: -35px;
+  padding: 8px;
+
+  background: #FBAF5F;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border: 0;
+  border-radius: 10px;
+  font-family: LuloCleanOneBold, sans-serif;
+  font-size: 18px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.InputWithButton-Button:hover {
+  text-decoration: none;
 }
