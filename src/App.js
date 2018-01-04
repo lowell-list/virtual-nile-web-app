@@ -180,25 +180,20 @@ class PageSimpleQuestion extends Component {
   }
 
   onInputFocus() {
-    this.setPageStatusBarVisibility(true,0);
+    this.setPageStatusBarVisible(true);
   }
 
   onInputBlur(value) {
     this.props.onUserInput(value);
-    this.setPageStatusBarVisibility(false,500);
+    this.setPageStatusBarVisible(false,500);
   }
 
-  setPageStatusBarVisibility(value, delayMillis)
+  setPageStatusBarVisible(value, delayMillis = 0)
   {
     clearTimeout(this.statusBarVisibilityTimeout);
-    if(delayMillis===0) {
+    this.statusBarVisibilityTimeout = setTimeout(() => {
       this.setState({isPageStatusBarVisible: value});
-    }
-    else {
-      this.statusBarVisibilityTimeout = setTimeout(() => {
-        this.setState({isPageStatusBarVisible: value});
-      },delayMillis);
-    }
+    },delayMillis);
   }
 }
 

@@ -37,7 +37,7 @@ class InputWithButton extends Component
   }
 
   onInputFocus() {
-    this.setButtonVisible(true,0); // show button
+    this.setButtonVisible(true); // show button
     if(typeof this.props.onFocus === "function") { this.props.onFocus(); }
   }
 
@@ -50,17 +50,12 @@ class InputWithButton extends Component
     this.setState({inputValue:event.target.value});
   }
 
-  setButtonVisible(value, delayMillis)
+  setButtonVisible(value, delayMillis = 0)
   {
     clearTimeout(this.buttonVisibilityTimeout); // clear any previous timeouts
-    if(delayMillis===0) {
+    this.buttonVisibilityTimeout = setTimeout(() => {
       this.setState({buttonVisible: value});
-    }
-    else {
-      this.buttonVisibilityTimeout = setTimeout(() => {
-        this.setState({buttonVisible: value});
-      },delayMillis);
-    }
+    },delayMillis);
   }
 }
 
