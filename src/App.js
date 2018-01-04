@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {PageLanding, PageSimpleQuestionLongAnswer, PageSimpleQuestionShortAnswer} from "./Page";
+import Modal from 'simple-react-modal';
 import './App.css';
 
 // page IDs
@@ -48,6 +49,7 @@ class App extends Component {
       screenName: screenName,
       email: email,
       dreamText: dreamText,
+      modalMessage: null,
     };
 
     this.pageChangeTimeout = 0;
@@ -67,6 +69,9 @@ class App extends Component {
     return (
       <div className="App">
         {this.currentPage()}
+        <Modal show={(this.state.modalMessage!=null)} onClose={() => this.onModalClose()}>
+          <div>{this.state.modalMessage}</div>
+        </Modal>
       </div>
     );
   }
@@ -112,20 +117,28 @@ class App extends Component {
           }}
         />;
       case PID_5_1_ENTER_DREAM:
-        return <PageSimpleQuestionLongAnswer
-          questionText={`${this.state.screenName}, tell us about your dream`}
-          inputValue={this.state.dreamText}
-          onPreviousClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
-          onNextClick={() => console.log("There is no next page yet; coming soon...")}
-          onUserInput={(value) => {
-            this.setState({dreamText:value});
-            sessionStorage.setItem(SSK_DREAM_TEXT,value);
-            if(value!=null && value.length>0) {
-              console.log("ready for next screen!!");
-            }
-          }}
-        />;
+        return (
+          <PageSimpleQuestionLongAnswer
+            questionText={`${this.state.screenName}, tell us about your dream`}
+            inputValue={this.state.dreamText}
+            onPreviousClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
+            onNextClick={() => console.log("There is no next page yet; coming soon...")}
+            onDoneClick={() => console.log("done") }
+            onUserInput={(value) => {
+              this.setState({dreamText:value});
+              sessionStorage.setItem(SSK_DREAM_TEXT,value);
+              if(value!=null && value.length>0) {
+                this.setState({modalMessage:"ready for next screen!!"});
+                console.log("ready for next screen!!");
+              }
+            }}
+          />
+        )
     }
+  }
+
+  onModalClose() {
+    this.setState({modalMessage: null});
   }
 
   changePage(pageId, delayMillis = 0)

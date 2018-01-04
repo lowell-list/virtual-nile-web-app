@@ -14,14 +14,9 @@
   resize: none;
 
   padding: 10px;
-  border: #22BBB4 2px solid;
   font-family: LuloCleanOne, sans-serif;
   font-size: 16px;
   color: #000000;
-}
-
-.TextareaWithButton__textarea:focus {
-  outline: none;
 }
 
 .TextareaWithButton__button {
@@ -32,26 +27,4 @@
   right: 14px;
   margin-left: auto;
   padding: 8px;
-
-  background: #FBAF5F;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border: 0;
-  border-radius: 10px;
-  font-family: LuloCleanOneBold, sans-serif;
-  font-size: 18px;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.TextareaWithButton__button:hover {
-  text-decoration: none;
-}
-
-.TextareaWithButton__button:focus {
-  background: #e0e0e0;
-  outline: none;
-  -webkit-box-shadow: inset 0px 0px 4px #ccc;
-  -moz-box-shadow: inset 0px 0px 4px #ccc;
-  box-shadow: inset 0px 0px 4px #ccc;
 }

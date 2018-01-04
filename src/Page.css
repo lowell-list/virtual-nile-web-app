@@ -28,27 +28,16 @@
   height: 100%;
 }
 
-.Page__evergreenNextButton {
+.Page__startButton {
   position: fixed;
   width: 90%;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  font-family: LuloCleanOneBold, sans-serif;
-  color: #ffffff;
-  font-size: 20px;
-  background: #24bab5;
-  padding: 10px 20px 10px 20px;
-  text-decoration: none;
-  border: none;
 }
 
-.Page__evergreenNextButton:hover {
-  text-decoration: none;
+.Page__buttonOverStatusBar {
+  position: fixed;
+  width: 90%;
+  bottom: 100px;
 }
 
 .Page__simpleQuestionShortAnswer {
@@ -112,4 +101,8 @@
 
 .Page__statusBar__buttons__button:hover {
   text-decoration: none;
+}
+
+.Page__statusBar__buttons__button:focus {
+  outline: none;
 }

@@ -19,7 +19,7 @@ export class PageLanding extends Component {
         <p className="Page__normalText">Eos populo delenit repudiandae id, in eripuit imperdiet mel, iuvaret dolores vis id. Menandri scripserit sed in, eam in mollis expetenda repudiandae. Ne eros error hendrerit mea. Ut usu libris virtute. At enim falli accommodare vis.</p>
         <p className="Page__normalText">Ut modo aeterno concludaturque pri, eu voluptua ullamcorper sit. Eu sea elitr constituto, vel cibo alterum inermis te. Omnium nostrum ne mea. Ut vis summo choro animal, pri cu ullum cetero eripuit.</p>
         <p className="Page__normalText">Mea eu augue omnium timeam, eu salutatus disputationi vel, id wisi saepe delicata has. An eum odio inermis. Quo nibh intellegat interesset an. Soluta prompta cu per, ut quidam bonorum epicurei sit.</p>
-        <button className="Page__evergreenNextButton" onClick={this.props.onStartClick}>Start!</button>
+        <button className="Page__startButton AppTheme__button--blue" onClick={this.props.onStartClick}>Start!</button>
       </div>
     );
   }
@@ -96,6 +96,10 @@ export class PageSimpleQuestionLongAnswer extends PageWithStatusBar {
             onBlur={(value) => this.onInputBlur(value) }
           />
         </div>
+        <button className="Page__buttonOverStatusBar AppTheme__button--blue"
+                onClick={this.props.onDoneClick}>
+          Done!
+        </button>
         <PageStatusBar
           visible={this.state.isPageStatusBarVisible}
           onPreviousClick={this.props.onPreviousClick}
