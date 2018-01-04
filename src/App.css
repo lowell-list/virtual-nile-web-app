@@ -91,3 +91,8 @@ examples:
   -moz-box-shadow: inset 0px 0px 4px #ccc;
   box-shadow: inset 0px 0px 4px #ccc;
 }
+
+.App__errorMessage {
+  font-family: LuloCleanOneBold, sans-serif;
+  font-size: 16px;
+}

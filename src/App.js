@@ -4,36 +4,44 @@ import Modal from 'simple-react-modal';
 import './App.css';
 
 // page IDs
-const PID_1_1_LANDING             = '1.1-landing';
-const PID_3_1_ENTER_NAME          = '3.1-enter-name';
-const PID_4_1_ENTER_EMAIL         = '4.1-enter-email';
-const PID_5_1_ENTER_DREAM         = '5.1-enter-dream';
+const PID_1_1_LANDING           = '1.1-landing';
+const PID_3_1_ENTER_NAME        = '3.1-enter-name';
+const PID_4_1_ENTER_EMAIL       = '4.1-enter-email';
+const PID_5_1_ENTER_DREAM       = '5.1-enter-dream';
 
 // local storage keys
-const LSK_SCREEN_NAME             = 'screenName';
-const LSK_EMAIL                   = 'email';
+const LSK_SCREEN_NAME           = 'screenName';
+const LSK_EMAIL                 = 'email';
 
 // session storage keys
-const SSK_CURRENT_PAGE_ID         = 'currentPageId';
-const SSK_DREAM_TEXT              = 'dreamText';
+const SSK_CURRENT_PAGE_ID       = 'currentPageId';
+const SSK_DREAM_TEXT            = 'dreamText';
+
+// valid location IDs
+const VALID_LOCATION_IDS        = [ 'babas_pdx_bethany', 'babas_pdx_cascade' ];
 
 class App extends Component {
 
   constructor(props) {
     super(props);
 
+    let constructorError = null;
+
     // determine current page ID
     let currentPageId = this.getCachedValue(
       SSK_CURRENT_PAGE_ID, PID_1_1_LANDING, sessionStorage, 'current page ID');
 
     // determine location ID from query string
-    let locationId = 'babas_pdx_cascade'; // default value
-    // TODO: *require* location ID in query string; no default value
     let urlParams = new URLSearchParams(window.location.search);
     let queryLocationId = urlParams.get('locationId');
-    if(queryLocationId!=null) {
-      locationId = queryLocationId;
-      console.log("using location ID from query string: " + queryLocationId);
+    if(queryLocationId!=null && VALID_LOCATION_IDS.indexOf(queryLocationId)>=0) {
+      console.log("valid location ID found in query string: " + queryLocationId);
+    }
+    else {
+      constructorError = {
+        message: "no valid location ID found in query string",
+        allowCancel: false
+      };
     }
 
     // lookup state variables, if they exist
@@ -44,12 +52,13 @@ class App extends Component {
     // TODO: randomly generate user ID and local-store it
     this.state = {
       currentPageId: currentPageId,
-      locationId: locationId,
+      locationId: queryLocationId,
       userId: '0123456789',
       screenName: screenName,
       email: email,
       dreamText: dreamText,
       modalMessage: null,
+      error: constructorError
     };
 
     this.pageChangeTimeout = 0;
@@ -68,10 +77,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {this.currentPage()}
-        <Modal show={(this.state.modalMessage!=null)} onClose={() => this.onModalClose()}>
-          <div>{this.state.modalMessage}</div>
-        </Modal>
+        {(this.state.error==null) ? this.currentPage() : this.errorModal()}
       </div>
     );
   }
@@ -137,10 +143,6 @@ class App extends Component {
     }
   }
 
-  onModalClose() {
-    this.setState({modalMessage: null});
-  }
-
   changePage(pageId, delayMillis = 0)
   {
     clearTimeout(this.pageChangeTimeout);
@@ -150,6 +152,24 @@ class App extends Component {
       sessionStorage.setItem(SSK_CURRENT_PAGE_ID,pageId);
     },delayMillis);
   }
+
+  errorModal() {
+    return (
+      <Modal
+        containerStyle={{padding: '20px', width: '90%'}}
+        show={(this.state.error!=null)}
+        closeOnOuterClick={this.state.error.allowCancel}
+        onClose={() => this.onErrorModalClose()}
+      >
+        <div className="App__errorMessage">{this.state.error.message}</div>
+      </Modal>
+    )
+  }
+
+  onErrorModalClose() {
+    if(this.state.error.allowCancel) { this.setState({error: null}); }
+  }
+
 }
 
 export default App;
