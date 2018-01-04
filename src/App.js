@@ -26,7 +26,8 @@ class App extends Component {
       SSK_CURRENT_PAGE_ID, PID_1_1_LANDING, sessionStorage, 'current page ID');
 
     // determine location ID from query string
-    let locationId = 'babas_pdx_cascade';
+    let locationId = 'babas_pdx_cascade'; // default value
+    // TODO: *require* location ID in query string; no default value
     let urlParams = new URLSearchParams(window.location.search);
     let queryLocationId = urlParams.get('locationId');
     if(queryLocationId!=null) {
@@ -34,17 +35,19 @@ class App extends Component {
       console.log("using location ID from query string: " + queryLocationId);
     }
 
-    // lookup email and screen name, if they exist
+    // lookup state variables, if they exist
     let screenName = this.getCachedValue(LSK_SCREEN_NAME, '', localStorage, 'screen name');
     let email = this.getCachedValue(LSK_EMAIL, '', localStorage, 'email');
+    let dreamText = this.getCachedValue(SSK_DREAM_TEXT, '', sessionStorage, 'dream text');
 
+    // TODO: randomly generate user ID and local-store it
     this.state = {
       currentPageId: currentPageId,
       locationId: locationId,
-      userId: '0123456789',             // TODO: randomly generate this and store
+      userId: '0123456789',
       screenName: screenName,
       email: email,
-      dreamText: '',
+      dreamText: dreamText,
     };
 
     this.pageChangeTimeout = 0;
@@ -83,7 +86,7 @@ class App extends Component {
       case PID_3_1_ENTER_NAME:
         return <PageSimpleQuestionShortAnswer
           questionText={"What's your name?"}
-          currentInputValue={this.state.screenName}
+          inputValue={this.state.screenName}
           onPreviousClick={() => this.changePage(PID_1_1_LANDING)}
           onNextClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
           onUserInput={(value) => {
@@ -97,7 +100,7 @@ class App extends Component {
       case PID_4_1_ENTER_EMAIL:
         return <PageSimpleQuestionShortAnswer
           questionText={`${this.state.screenName}, what's your email?`}
-          currentInputValue={this.state.email}
+          inputValue={this.state.email}
           onPreviousClick={() => this.changePage(PID_3_1_ENTER_NAME)}
           onNextClick={() => this.changePage(PID_5_1_ENTER_DREAM)}
           onUserInput={(value) => {
@@ -111,9 +114,9 @@ class App extends Component {
       case PID_5_1_ENTER_DREAM:
         return <PageSimpleQuestionLongAnswer
           questionText={`${this.state.screenName}, tell us about your dream`}
-          currentInputValue={this.state.dreamText}
+          inputValue={this.state.dreamText}
           onPreviousClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
-          onNextClick={() => console.log("There is no next page yet.")}
+          onNextClick={() => console.log("There is no next page yet; coming soon...")}
           onUserInput={(value) => {
             this.setState({dreamText:value});
             sessionStorage.setItem(SSK_DREAM_TEXT,value);

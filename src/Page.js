@@ -41,7 +41,7 @@ export class PageSimpleQuestionShortAnswer extends Component {
         <div className="Page__simpleQuestionShortAnswer">
           <div className="Page__simpleQuestionHeader">{this.props.questionText}</div>
           <InputWithButton
-            value={this.props.currentInputValue}
+            value={this.props.inputValue}
             onFocus={() => this.onInputFocus() }
             onBlur={(value) => this.onInputBlur(value) }
           />
