@@ -47,6 +47,8 @@ class App extends Component {
       email: email,
       dreamText: '',
     };
+
+    this.pageChangeTimeout = 0;
   }
 
   getCachedValue(key, defaultValue, storage, description) {
@@ -65,6 +67,10 @@ class App extends Component {
         {this.currentPage()}
       </div>
     );
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.pageChangeTimeout);
   }
 
   /** returns the current Page based on the current page ID */
@@ -143,7 +149,7 @@ class PageSimpleQuestion extends Component {
     this.state = {
       isPageStatusBarVisible: false,
     };
-    this.mTimeout = 0;
+    this.statusBarVisibilityTimeout = 0;
   }
 
   render() {
@@ -168,7 +174,7 @@ class PageSimpleQuestion extends Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.mTimeout);
+    clearTimeout(this.statusBarVisibilityTimeout);
   }
 
   onInputFocus() {
@@ -182,12 +188,12 @@ class PageSimpleQuestion extends Component {
 
   setPageStatusBarVisibility(value, delayMillis)
   {
-    clearTimeout(this.mTimeout);
+    clearTimeout(this.statusBarVisibilityTimeout);
     if(delayMillis===0) {
       this.setState({isPageStatusBarVisible: value});
     }
     else {
-      this.mTimeout = setTimeout(() => {
+      this.statusBarVisibilityTimeout = setTimeout(() => {
         this.setState({isPageStatusBarVisible: value});
       },delayMillis);
     }

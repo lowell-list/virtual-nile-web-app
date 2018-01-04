@@ -8,7 +8,7 @@ class InputWithButton extends Component
       buttonVisible: false,
       inputValue: props.value,
     };
-    this.mTimeout = 0;
+    this.buttonVisibilityTimeout = 0;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,7 +33,7 @@ class InputWithButton extends Component
   }
 
   componentWillUnmount() {
-    clearTimeout(this.mTimeout);
+    clearTimeout(this.buttonVisibilityTimeout);
   }
 
   onInputFocus() {
@@ -52,12 +52,12 @@ class InputWithButton extends Component
 
   setButtonVisible(value, delayMillis)
   {
-    clearTimeout(this.mTimeout); // clear any previous timeouts
+    clearTimeout(this.buttonVisibilityTimeout); // clear any previous timeouts
     if(delayMillis===0) {
       this.setState({buttonVisible: value});
     }
     else {
-      this.mTimeout = setTimeout(() => {
+      this.buttonVisibilityTimeout = setTimeout(() => {
         this.setState({buttonVisible: value});
       },delayMillis);
     }
