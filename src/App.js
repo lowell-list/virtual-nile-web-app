@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {PageLanding, PageSimpleQuestionLongAnswer, PageSimpleQuestionShortAnswer} from "./Page";
 import Modal from 'simple-react-modal';
 import './App.css';
+import {randomAlphaNumericString} from './Util';
 
 // page IDs
 const PID_1_1_LANDING           = '1.1-landing';
@@ -12,6 +13,7 @@ const PID_5_1_ENTER_DREAM       = '5.1-enter-dream';
 // local storage keys
 const LSK_SCREEN_NAME           = 'screenName';
 const LSK_EMAIL                 = 'email';
+const LSK_USER_ID               = 'userId';
 
 // session storage keys
 const SSK_CURRENT_PAGE_ID       = 'currentPageId';
@@ -27,10 +29,6 @@ class App extends Component {
 
     let constructorError = null;
 
-    // determine current page ID
-    let currentPageId = this.getCachedValue(
-      SSK_CURRENT_PAGE_ID, PID_1_1_LANDING, sessionStorage, 'current page ID');
-
     // determine location ID from query string
     let urlParams = new URLSearchParams(window.location.search);
     let queryLocationId = urlParams.get('locationId');
@@ -44,16 +42,29 @@ class App extends Component {
       };
     }
 
+    // determine user ID
+    let userId = this.getCachedValue(LSK_USER_ID, null, localStorage, 'user ID');
+    if(userId==null) {
+      // generate a new random user ID and save it for all future use on this device
+      userId = randomAlphaNumericString(20,true);
+      localStorage.setItem(LSK_USER_ID,userId);
+      console.log(`generated and saved new user ID: ${userId}`);
+    }
+
+    // determine current page ID
+    let currentPageId = this.getCachedValue(
+      SSK_CURRENT_PAGE_ID, PID_1_1_LANDING, sessionStorage, 'current page ID');
+
     // lookup state variables, if they exist
     let screenName = this.getCachedValue(LSK_SCREEN_NAME, '', localStorage, 'screen name');
     let email = this.getCachedValue(LSK_EMAIL, '', localStorage, 'email');
     let dreamText = this.getCachedValue(SSK_DREAM_TEXT, '', sessionStorage, 'dream text');
 
-    // TODO: randomly generate user ID and local-store it
+    // set initial state
     this.state = {
       currentPageId: currentPageId,
       locationId: queryLocationId,
-      userId: '0123456789',
+      userId: userId,
       screenName: screenName,
       email: email,
       dreamText: dreamText,
@@ -69,7 +80,7 @@ class App extends Component {
     let cachedValue = storage.getItem(key);
     if(cachedValue!=null) {
       value = cachedValue;
-      console.log(`using cached ${description}: ${cachedValue}`);
+      console.log(`using cached ${description}: ${value}`);
     }
     return value;
   }

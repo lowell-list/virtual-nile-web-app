@@ -8,8 +8,13 @@
     <div>
       <h1>Create Dream</h1>
       <form id="create_dream_form">
-        <input type="hidden" name="location_id" value="babas_pdx_bethany">
-        <input type="hidden" name="user_id" value="1234567890">
+        <label for="location_id">location ID:</label>
+        <select name="location_id">
+          <option value="babas_pdx_bethany" selected>babas_pdx_bethany</option>
+          <option value="babas_pdx_cascade">babas_pdx_cascade</option>
+        </select>
+        <br>
+        <input type="hidden" name="user_id" value="12345678901234567890">
         <label for="email">email:</label>
         <input type="text" name="email" value="bob@example.com" placeholder="bob@example.com">
         <br>
