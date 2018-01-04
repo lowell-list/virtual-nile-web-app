@@ -53,6 +53,19 @@
   text-decoration: none;
 }
 
+.Page-Simple-Question {
+  display: block;
+}
+
+.Page-Simple-Question-Header {
+  font-family: LuloCleanOneBold, sans-serif;
+  font-size: 14pt;
+  color: #24bab5;
+  padding-top:110px;
+  padding-bottom:10px;
+  text-align: center;
+}
+
 .Page-StatusBar {
   position: fixed;
   width: 100%;
@@ -90,17 +103,4 @@
 
 .Page-StatusBar-button:hover {
   text-decoration: none;
-}
-
-.Page-Simple-Question {
-  display: block;
-}
-
-.Page-Simple-Question-Header {
-  font-family: LuloCleanOneBold, sans-serif;
-  font-size: 14pt;
-  color: #24bab5;
-  padding-top:110px;
-  padding-bottom:10px;
-  text-align: center;
 }
