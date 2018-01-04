@@ -92,11 +92,11 @@
   text-decoration: none;
 }
 
-.Page-Question {
+.Page-Simple-Question {
   display: block;
 }
 
-.Page-Question-Header {
+.Page-Simple-Question-Header {
   font-family: LuloCleanOneBold, sans-serif;
   font-size: 14pt;
   color: #24bab5;

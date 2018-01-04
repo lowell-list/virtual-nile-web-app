@@ -40,6 +40,10 @@ class App extends Component {
     this.state = {
       currentPageId: currentPageId,
       locationId: locationId,
+      userId: '0123456789',             // TODO: randomly generate this and store
+      email: '',
+      screenName: '',
+      dreamText: '',
     };
   }
 
@@ -48,18 +52,24 @@ class App extends Component {
       <div className="App">
         <CurrentPage
           currentPageId={this.state.currentPageId}
-          onPageIdSelected={(pageId) => this.handlePageIdSelected(pageId)}
+          onPageIdSelected={(pageId) => this.onPageIdSelected(pageId)}
+          onUserInput={(inputObject) => this.onUserInput(inputObject)}
         />
       </div>
     );
   }
 
-  handlePageIdSelected(pageId) {
+  onPageIdSelected(pageId) {
     console.log("page selected: " + pageId);
     this.setState({
       currentPageId: pageId
     });
     sessionStorage.setItem(SSK_CURRENT_PAGE_ID,pageId);
+  }
+
+  onUserInput(inputObject) {
+    console.log("user input: " + JSON.stringify(inputObject));
+
   }
 }
 
@@ -68,22 +78,24 @@ function CurrentPage(props) {
 
   const currentPageId = props.currentPageId;
   const onPageIdSelected = props.onPageIdSelected;
+  const onUserInput = props.onUserInput;
 
   switch(currentPageId) {
     case PID_3_1_ENTER_NAME:
-      return <PageEnterName
-        onPreviousClick={() => onPageIdSelected(PID_1_1_LANDING) }
-        onNextClick={() => onPageIdSelected(PID_4_1_ENTER_EMAIL) }
+      return <PageSimpleQuestion
+        onPreviousClick={() => onPageIdSelected(PID_1_1_LANDING)}
+        onNextClick={() => onPageIdSelected(PID_4_1_ENTER_EMAIL)}
+        onUserInput={(value) => onUserInput({screen_name:value})}
       />;
     case PID_4_1_ENTER_EMAIL:
       return <PageEnterEmail
-        onPreviousClick={() => onPageIdSelected(PID_3_1_ENTER_NAME) }
-        onNextClick={() => console.log("There is no next page yet.") }
+        onPreviousClick={() => onPageIdSelected(PID_3_1_ENTER_NAME)}
+        onNextClick={() => console.log("There is no next page yet.")}
       />;
     case PID_1_1_LANDING:
     default:
       return <PageLanding
-        onStartClick={() => onPageIdSelected(PID_3_1_ENTER_NAME) }
+        onStartClick={() => onPageIdSelected(PID_3_1_ENTER_NAME)}
       />;
   }
 }
@@ -109,7 +121,7 @@ class PageLanding extends Component {
   }
 }
 
-class PageEnterName extends Component {
+class PageSimpleQuestion extends Component {
 
   constructor(props) {
     super(props);
@@ -117,17 +129,19 @@ class PageEnterName extends Component {
       inputHasFocus: false
     };
     this.mTimeout = 0;
+    this.mInputValue = "";
   }
 
   render() {
     return (
       <div className="Page">
 
-        <div className="Page-Question">
-          <div className="Page-Question-Header">What's your name?</div>
+        <div className="Page-Simple-Question">
+          <div className="Page-Simple-Question-Header">What's your name?</div>
           <InputWithButton
             onFocus={() => this.setInputHasFocus(true,0) }
             onBlur={() => this.setInputHasFocus(false,500) }
+            onUserInput={(value) => this.onUserInput(value)}
           />
         </div>
         <PageStatusBar
@@ -137,6 +151,10 @@ class PageEnterName extends Component {
         />
       </div>
     );
+  }
+
+  onUserInput(value) {
+    console.log("received value from user: " + value);
   }
 
   setInputHasFocus(newValue, delayMillis)
