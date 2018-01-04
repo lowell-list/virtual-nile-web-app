@@ -31,7 +31,7 @@ class PageWithStatusBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPageStatusBarVisible: false,
+      isPageStatusBarVisible: true,
     };
     this.statusBarVisibilityTimeout = 0;
   }
@@ -64,7 +64,7 @@ export class PageSimpleQuestionShortAnswer extends PageWithStatusBar {
           />
         </div>
         <PageStatusBar
-          hide={this.state.isPageStatusBarVisible}
+          visible={this.state.isPageStatusBarVisible}
           onPreviousClick={this.props.onPreviousClick}
           onNextClick={this.props.onNextClick}
         />
@@ -73,12 +73,12 @@ export class PageSimpleQuestionShortAnswer extends PageWithStatusBar {
   }
 
   onInputFocus() {
-    this.setPageStatusBarVisible(true);
+    this.setPageStatusBarVisible(false);
   }
 
   onInputBlur(value) {
     this.props.onUserInput(value);
-    this.setPageStatusBarVisible(false,500);
+    this.setPageStatusBarVisible(true,500);
   }
 }
 
@@ -97,7 +97,7 @@ export class PageSimpleQuestionLongAnswer extends PageWithStatusBar {
           />
         </div>
         <PageStatusBar
-          hide={this.state.isPageStatusBarVisible}
+          visible={this.state.isPageStatusBarVisible}
           onPreviousClick={this.props.onPreviousClick}
           onNextClick={this.props.onNextClick}
         />
@@ -106,17 +106,17 @@ export class PageSimpleQuestionLongAnswer extends PageWithStatusBar {
   }
 
   onInputFocus() {
-    this.setPageStatusBarVisible(true);
+    this.setPageStatusBarVisible(false);
   }
 
   onInputBlur(value) {
     this.props.onUserInput(value);
-    this.setPageStatusBarVisible(false,500);
+    this.setPageStatusBarVisible(true,500);
   }
 }
 
 function PageStatusBar(props) {
-  if(props.hide) {
+  if(!props.visible) {
     return null;
   }
   return (
