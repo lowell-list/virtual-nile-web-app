@@ -1,0 +1,37 @@
+@font-face {
+  font-family: LuloCleanOneBold;
+  src: url('./font/Lulo_Clean_One_Bold.otf');
+}
+
+@font-face {
+  font-family: LuloCleanOne;
+  src: url('./font/Lulo_Clean_One.otf');
+}
+
+.InputWithButton {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.InputWithButton-Input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+
+  padding: 10px;
+  font-size: 16px;
+  border: #22BBB4 4px solid;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-radius: 0;
+  font-family: LuloCleanOne, sans-serif;
+}
+
+.InputWithButton-Button {
+  position: relative;
+  display: block;
+  right: 15px;
+  margin-left: auto;
+  top: -35px;
+}

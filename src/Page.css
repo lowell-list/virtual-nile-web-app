@@ -9,9 +9,8 @@
 }
 
 .Page {
-  width: 90%;
-  padding-left:5%;
-  padding-right:5%;
+  display: block;
+  padding: 20px;
 }
 
 .Page-Header-1 {
@@ -64,7 +63,7 @@
   text-decoration: none;
 }
 
-.PageStatusBar {
+.Page-StatusBar {
   position: fixed;
   width: 100%;
   bottom: 0;
@@ -74,24 +73,24 @@
   padding: 10px;
 }
 
-.PageStatusBar-progressbar {
+.Page-StatusBar-progressbar {
   position: absolute;
   background: goldenrod;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.PageStatusBar-buttons {
+.Page-StatusBar-buttons {
   float: right;
 }
 
-.PageStatusBar-button {
+.Page-StatusBar-button {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
   font-family: LuloCleanOne, sans-serif;
   color: #ffffff;
-  font-size: 40px;
+  font-size: 30px;
   background: #676867;
   padding: 5px 15px 5px 15px;
   text-decoration: none;
@@ -99,6 +98,19 @@
   margin-right: 10px;
 }
 
-.PageStatusBar-button:hover {
+.Page-StatusBar-button:hover {
   text-decoration: none;
+}
+
+.Page-Question {
+  display: block;
+}
+
+.Page-Question-Header {
+  font-family: LuloCleanOneBold, sans-serif;
+  font-size: 14pt;
+  color: #24bab5;
+  padding-top:150px;
+  padding-bottom:10px;
+  text-align: center;
 }
