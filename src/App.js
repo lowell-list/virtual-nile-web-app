@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {PageLanding, PageSimpleQuestion} from "./Page";
+import {PageLanding, PageSimpleQuestionLongAnswer, PageSimpleQuestionShortAnswer} from "./Page";
 import './App.css';
 
 // page IDs
 const PID_1_1_LANDING             = '1.1-landing';
 const PID_3_1_ENTER_NAME          = '3.1-enter-name';
 const PID_4_1_ENTER_EMAIL         = '4.1-enter-email';
+const PID_5_1_ENTER_DREAM         = '5.1-enter-dream';
 
 // local storage keys
 const LSK_SCREEN_NAME             = 'screenName';
@@ -13,6 +14,7 @@ const LSK_EMAIL                   = 'email';
 
 // session storage keys
 const SSK_CURRENT_PAGE_ID         = 'currentPageId';
+const SSK_DREAM_TEXT              = 'dreamText';
 
 class App extends Component {
 
@@ -79,7 +81,7 @@ class App extends Component {
           onStartClick={() => this.changePage(PID_3_1_ENTER_NAME)}
         />;
       case PID_3_1_ENTER_NAME:
-        return <PageSimpleQuestion
+        return <PageSimpleQuestionShortAnswer
           questionText={"What's your name?"}
           currentInputValue={this.state.screenName}
           onPreviousClick={() => this.changePage(PID_1_1_LANDING)}
@@ -93,14 +95,28 @@ class App extends Component {
           }}
         />;
       case PID_4_1_ENTER_EMAIL:
-        return <PageSimpleQuestion
+        return <PageSimpleQuestionShortAnswer
           questionText={`${this.state.screenName}, what's your email?`}
           currentInputValue={this.state.email}
           onPreviousClick={() => this.changePage(PID_3_1_ENTER_NAME)}
-          onNextClick={() => console.log("There is no next page yet.")}
+          onNextClick={() => this.changePage(PID_5_1_ENTER_DREAM)}
           onUserInput={(value) => {
             this.setState({email:value});
             localStorage.setItem(LSK_EMAIL,value);
+            if(value!=null && value.length>0) {
+              console.log("ready for next screen!!");
+            }
+          }}
+        />;
+      case PID_5_1_ENTER_DREAM:
+        return <PageSimpleQuestionLongAnswer
+          questionText={`${this.state.screenName}, tell us about your dream`}
+          currentInputValue={this.state.dreamText}
+          onPreviousClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
+          onNextClick={() => console.log("There is no next page yet.")}
+          onUserInput={(value) => {
+            this.setState({dreamText:value});
+            sessionStorage.setItem(SSK_DREAM_TEXT,value);
             if(value!=null && value.length>0) {
               console.log("ready for next screen!!");
             }

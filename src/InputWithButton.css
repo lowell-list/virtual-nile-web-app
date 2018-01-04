@@ -2,7 +2,7 @@
   display: block;
 }
 
-.InputWithButton-Input {
+.InputWithButton__input {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -16,11 +16,11 @@
   color: #000000;
 }
 
-.InputWithButton-Input:focus {
+.InputWithButton__input:focus {
   outline: none;
 }
 
-.InputWithButton-Button {
+.InputWithButton__button {
   position: relative;
   display: block;
   /* this is a hack; would prefer a solution that vertical-centers the button on the input */
@@ -40,11 +40,11 @@
   text-decoration: none;
 }
 
-.InputWithButton-Button:hover {
+.InputWithButton__button:hover {
   text-decoration: none;
 }
 
-.InputWithButton-Button:focus {
+.InputWithButton__button:focus {
   background: #e0e0e0;
   outline: none;
   -webkit-box-shadow: inset 0px 0px 4px #ccc;
