@@ -3,23 +3,15 @@ import React, {Component} from 'react';
 class InputWithButton extends Component
 {
   constructor(props) {
-    console.log("running constructor...");
     super(props);
     this.state = {
       buttonVisible: false,
       inputValue: props.value,
     };
     this.mTimeout = 0;
-    // this.onInputFocus = this.onInputFocus.bind(this);
-    // this.onInputBlur = this.onInputBlur.bind(this);
-    // this.onInputChange = this.onInputChange.bind(this);
-    // this.setButtonVisible = this.setButtonVisible.bind(this);
-    // this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("InputWithButton: setting current state " + this.state.inputValue +
-      " to next props " + nextProps.value);
     this.setState({inputValue: nextProps.value});
   }
 

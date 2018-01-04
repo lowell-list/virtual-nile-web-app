@@ -76,7 +76,6 @@ class App extends Component {
           onStartClick={() => this.onPageIdSelected(PID_3_1_ENTER_NAME)}
         />;
       case PID_3_1_ENTER_NAME:
-        console.log("currentPage() preparing name component, name is " + this.state.screenName);
         return <PageSimpleQuestion
           questionText={"What's your name?"}
           currentInputValue={this.state.screenName}
@@ -91,7 +90,6 @@ class App extends Component {
           }}
         />;
       case PID_4_1_ENTER_EMAIL:
-        console.log("currentPage() preparing email component, email is " + this.state.email);
         return <PageSimpleQuestion
           questionText={`${this.state.screenName}, what's your email?`}
           currentInputValue={this.state.email}
@@ -144,15 +142,8 @@ class PageSimpleQuestion extends Component {
     super(props);
     this.state = {
       isPageStatusBarVisible: false,
-      inputValue: props.currentInputValue,
     };
     this.mTimeout = 0;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log("PageSimpleQuestion: setting current state " + this.state.inputValue +
-      " to next props " + nextProps.currentInputValue);
-    this.setState({inputValue: nextProps.currentInputValue});
   }
 
   render() {
@@ -162,7 +153,7 @@ class PageSimpleQuestion extends Component {
         <div className="Page-Simple-Question">
           <div className="Page-Simple-Question-Header">{this.props.questionText}</div>
           <InputWithButton
-            value={this.state.inputValue}
+            value={this.props.currentInputValue}
             onFocus={() => this.onInputFocus() }
             onBlur={(value) => this.onInputBlur(value) }
           />
@@ -185,7 +176,6 @@ class PageSimpleQuestion extends Component {
   }
 
   onInputBlur(value) {
-    this.setState({inputValue:value});
     this.props.onUserInput(value);
     this.setPageStatusBarVisibility(false,500);
   }
