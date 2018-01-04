@@ -3,18 +3,31 @@ import React, {Component} from 'react';
 class InputWithButton extends Component
 {
   constructor(props) {
+    console.log("running constructor...");
     super(props);
     this.state = {
       buttonVisible: false,
-      inputValue: "",
+      inputValue: props.value,
     };
     this.mTimeout = 0;
+
+    this.onInputFocus = this.onInputFocus.bind(this);
+    this.onInputBlur = this.onInputBlur.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+    this.setButtonVisible = this.setButtonVisible.bind(this);
+    this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("setting " + this.state.inputValue + " to " + nextProps.value);
+    this.setState({inputValue: nextProps.value});
   }
 
   render() {
     return (
       <div className="InputWithButton">
         <input type="text" className="InputWithButton-Input" size="10"
+               value={this.state.inputValue}
                onFocus={() => this.onInputFocus()}
                onBlur={() => this.onInputBlur()}
                onChange={(event) => this.onInputChange(event)}
@@ -22,10 +35,13 @@ class InputWithButton extends Component
         <input type="button" className="InputWithButton-Button"
                value="OK"
                style={{visibility:(this.state.buttonVisible?'visible':'hidden')}}
-               // onFocus={() => this.onButtonClick() }
         />
       </div>
     )
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.mTimeout);
   }
 
   onInputFocus() {
@@ -43,11 +59,6 @@ class InputWithButton extends Component
 
   onInputChange(event) {
     this.setState({inputValue:event.target.value});
-  }
-
-  onButtonClick() {
-    console.log("harrro peeps!");
-    console.log("button clicked! value is " + this.state.inputValue);
   }
 
   setButtonVisible(value, delayMillis)

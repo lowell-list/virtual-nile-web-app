@@ -11,6 +11,8 @@ const PID_3_1_ENTER_NAME          = '3.1-enter-name';
 const PID_4_1_ENTER_EMAIL         = '4.1-enter-email';
 
 // local storage keys
+const LSK_SCREEN_NAME             = 'screenName';
+const LSK_EMAIL                   = 'email';
 
 // session storage keys
 const SSK_CURRENT_PAGE_ID         = 'currentPageId';
@@ -21,12 +23,8 @@ class App extends Component {
     super(props);
 
     // determine current page ID
-    let currentPageId = PID_1_1_LANDING;
-      let cachedCurrentPageId = sessionStorage.getItem(SSK_CURRENT_PAGE_ID);
-    if(cachedCurrentPageId!=null) {
-      currentPageId = cachedCurrentPageId;
-      console.log("using cached current page ID: " + currentPageId);
-    }
+    let currentPageId = this.getCachedValue(
+      SSK_CURRENT_PAGE_ID, PID_1_1_LANDING, sessionStorage, 'current page ID');
 
     // determine location ID from query string
     let locationId = 'babas_pdx_cascade';
@@ -37,26 +35,77 @@ class App extends Component {
       console.log("using location ID from query string: " + queryLocationId);
     }
 
+    // lookup email and screen name, if they exist
+    let screenName = this.getCachedValue(LSK_SCREEN_NAME, '', localStorage, 'screen name');
+    let email = this.getCachedValue(LSK_EMAIL, '', localStorage, 'email');
+
     this.state = {
       currentPageId: currentPageId,
       locationId: locationId,
       userId: '0123456789',             // TODO: randomly generate this and store
-      email: '',
-      screenName: '',
+      screenName: screenName,
+      email: email,
       dreamText: '',
     };
+  }
+
+  getCachedValue(key, defaultValue, storage, description) {
+    let value = defaultValue;
+    let cachedValue = storage.getItem(key);
+    if(cachedValue!=null) {
+      value = cachedValue;
+      console.log(`using cached ${description}: ${cachedValue}`);
+    }
+    return value;
   }
 
   render() {
     return (
       <div className="App">
-        <CurrentPage
-          currentPageId={this.state.currentPageId}
-          onPageIdSelected={(pageId) => this.onPageIdSelected(pageId)}
-          onUserInput={(inputObject) => this.onUserInput(inputObject)}
-        />
+        {this.currentPage()}
       </div>
     );
+  }
+
+  /** returns the current Page based on the current page ID */
+  currentPage() {
+    switch(this.state.currentPageId) {
+      default:
+      case PID_1_1_LANDING:
+        return <PageLanding
+          onStartClick={() => this.onPageIdSelected(PID_3_1_ENTER_NAME)}
+        />;
+      case PID_3_1_ENTER_NAME:
+        console.log("preparing name component, name is " + this.state.screenName);
+        return <PageSimpleQuestion
+          questionText={"What's your name?"}
+          currentInputValue={this.state.screenName}
+          onPreviousClick={() => this.onPageIdSelected(PID_1_1_LANDING)}
+          onNextClick={() => this.onPageIdSelected(PID_4_1_ENTER_EMAIL)}
+          onUserInput={(value) => {
+            this.setState({screenName:value});
+            localStorage.setItem(LSK_SCREEN_NAME,value);
+            if(value!=null && value.length>0) {
+              this.onPageIdSelected(PID_4_1_ENTER_EMAIL);
+            }
+          }}
+        />;
+      case PID_4_1_ENTER_EMAIL:
+        console.log("preparing email component, email is " + this.state.email);
+        return <PageSimpleQuestion
+          questionText={`${this.state.screenName}, what's your email?`}
+          currentInputValue={this.state.email}
+          onPreviousClick={() => this.onPageIdSelected(PID_3_1_ENTER_NAME)}
+          onNextClick={() => console.log("There is no next page yet.")}
+          onUserInput={(value) => {
+            this.setState({email:value});
+            localStorage.setItem(LSK_EMAIL,value);
+            if(value!=null && value.length>0) {
+              console.log("ready for next screen!!");
+            }
+          }}
+        />;
+    }
   }
 
   onPageIdSelected(pageId) {
@@ -65,38 +114,6 @@ class App extends Component {
       currentPageId: pageId
     });
     sessionStorage.setItem(SSK_CURRENT_PAGE_ID,pageId);
-  }
-
-  onUserInput(inputObject) {
-    console.log("user input: " + JSON.stringify(inputObject));
-
-  }
-}
-
-/** returns the current Page based on the current page ID */
-function CurrentPage(props) {
-
-  const currentPageId = props.currentPageId;
-  const onPageIdSelected = props.onPageIdSelected;
-  const onUserInput = props.onUserInput;
-
-  switch(currentPageId) {
-    case PID_3_1_ENTER_NAME:
-      return <PageSimpleQuestion
-        onPreviousClick={() => onPageIdSelected(PID_1_1_LANDING)}
-        onNextClick={() => onPageIdSelected(PID_4_1_ENTER_EMAIL)}
-        onUserInput={(value) => onUserInput({screen_name:value})}
-      />;
-    case PID_4_1_ENTER_EMAIL:
-      return <PageEnterEmail
-        onPreviousClick={() => onPageIdSelected(PID_3_1_ENTER_NAME)}
-        onNextClick={() => console.log("There is no next page yet.")}
-      />;
-    case PID_1_1_LANDING:
-    default:
-      return <PageLanding
-        onStartClick={() => onPageIdSelected(PID_3_1_ENTER_NAME)}
-      />;
   }
 }
 
@@ -126,10 +143,10 @@ class PageSimpleQuestion extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputHasFocus: false
+      inputHasFocus: false,
+      inputValue: props.currentInputValue,
     };
     this.mTimeout = 0;
-    this.mInputValue = "";
   }
 
   render() {
@@ -137,11 +154,12 @@ class PageSimpleQuestion extends Component {
       <div className="Page">
 
         <div className="Page-Simple-Question">
-          <div className="Page-Simple-Question-Header">What's your name?</div>
+          <div className="Page-Simple-Question-Header">{this.props.questionText}</div>
           <InputWithButton
+            value={this.props.currentInputValue}
             onFocus={() => this.setInputHasFocus(true,0) }
             onBlur={() => this.setInputHasFocus(false,500) }
-            onUserInput={(value) => this.onUserInput(value)}
+            onUserInput={(value) => this.setInputValue(value)}
           />
         </div>
         <PageStatusBar
@@ -153,36 +171,22 @@ class PageSimpleQuestion extends Component {
     );
   }
 
-  onUserInput(value) {
-    console.log("received value from user: " + value);
+  setInputValue(value) {
+    this.setState({inputValue: value});
   }
 
-  setInputHasFocus(newValue, delayMillis)
+  setInputHasFocus(value, delayMillis)
   {
     clearTimeout(this.mTimeout);
     if(delayMillis===0) {
-      this.setState({inputHasFocus: newValue});
+      this.setState({inputHasFocus: value});
     }
     else {
+      this.props.onUserInput(this.state.inputValue);
       this.mTimeout = setTimeout(() => {
-        this.setState({inputHasFocus: newValue});
+        this.setState({inputHasFocus: value});
       },delayMillis);
     }
-  }
-}
-
-class PageEnterEmail extends Component {
-
-  render() {
-    return (
-      <div className="Page">
-        <p className="Page-Header-1">What's your email?</p>
-        <PageStatusBar
-          onPreviousClick={this.props.onPreviousClick}
-          onNextClick={this.props.onNextClick}
-        />
-      </div>
-    );
   }
 }
 
