@@ -47,6 +47,14 @@ examples:
   outline: none;
 }
 
+.AppTheme__button--blue:active {
+  background: #e0e0e0;
+  outline: none;
+  -webkit-box-shadow: inset 0px 0px 4px #ccc;
+  -moz-box-shadow: inset 0px 0px 4px #ccc;
+  box-shadow: inset 0px 0px 4px #ccc;
+}
+
 .AppTheme__element--blueBorder {
   border: #22BBB4 2px solid;
   border-radius: 0;
@@ -73,6 +81,10 @@ examples:
 }
 
 .AppTheme__button--smallOrange:focus {
+  outline: none;
+}
+
+.AppTheme__button--smallOrange:active {
   background: #e0e0e0;
   outline: none;
   -webkit-box-shadow: inset 0px 0px 4px #ccc;

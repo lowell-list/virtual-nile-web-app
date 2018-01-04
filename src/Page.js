@@ -97,6 +97,7 @@ export class PageSimpleQuestionLongAnswer extends PageWithStatusBar {
           />
         </div>
         <button className="Page__buttonOverStatusBar AppTheme__button--blue"
+                style={{visibility:(this.state.isPageStatusBarVisible?'visible':'hidden')}}
                 onClick={this.props.onDoneClick}>
           Done!
         </button>

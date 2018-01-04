@@ -128,7 +128,7 @@ class App extends Component {
               this.setState({dreamText:value});
               sessionStorage.setItem(SSK_DREAM_TEXT,value);
               if(value!=null && value.length>0) {
-                this.setState({modalMessage:"ready for next screen!!"});
+                // this.setState({modalMessage:"ready for next screen!!"});
                 console.log("ready for next screen!!");
               }
             }}

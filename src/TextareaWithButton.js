@@ -24,6 +24,7 @@ class TextareaWithButton extends Component
                   onFocus={() => this.onTextareaFocus()}
                   onBlur={() => this.onTextareaBlur()}
                   onChange={(event) => this.onTextareaChange(event)}
+                  maxLength={280}
         />
         <input type="button" className="TextareaWithButton__button AppTheme__button--smallOrange"
                value="OK"
