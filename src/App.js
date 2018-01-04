@@ -76,7 +76,7 @@ class App extends Component {
           onStartClick={() => this.onPageIdSelected(PID_3_1_ENTER_NAME)}
         />;
       case PID_3_1_ENTER_NAME:
-        console.log("preparing name component, name is " + this.state.screenName);
+        console.log("currentPage() preparing name component, name is " + this.state.screenName);
         return <PageSimpleQuestion
           questionText={"What's your name?"}
           currentInputValue={this.state.screenName}
@@ -85,13 +85,13 @@ class App extends Component {
           onUserInput={(value) => {
             this.setState({screenName:value});
             localStorage.setItem(LSK_SCREEN_NAME,value);
-            if(value!=null && value.length>0) {
-              this.onPageIdSelected(PID_4_1_ENTER_EMAIL);
-            }
+            // if(value!=null && value.length>0) {
+            //   this.onPageIdSelected(PID_4_1_ENTER_EMAIL);
+            // }
           }}
         />;
       case PID_4_1_ENTER_EMAIL:
-        console.log("preparing email component, email is " + this.state.email);
+        console.log("currentPage() preparing email component, email is " + this.state.email);
         return <PageSimpleQuestion
           questionText={`${this.state.screenName}, what's your email?`}
           currentInputValue={this.state.email}
@@ -143,10 +143,16 @@ class PageSimpleQuestion extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputHasFocus: false,
+      isPageStatusBarVisible: false,
       inputValue: props.currentInputValue,
     };
     this.mTimeout = 0;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("PageSimpleQuestion: setting current state " + this.state.inputValue +
+      " to next props " + nextProps.currentInputValue);
+    this.setState({inputValue: nextProps.currentInputValue});
   }
 
   render() {
@@ -156,14 +162,13 @@ class PageSimpleQuestion extends Component {
         <div className="Page-Simple-Question">
           <div className="Page-Simple-Question-Header">{this.props.questionText}</div>
           <InputWithButton
-            value={this.props.currentInputValue}
-            onFocus={() => this.setInputHasFocus(true,0) }
-            onBlur={() => this.setInputHasFocus(false,500) }
-            onUserInput={(value) => this.setInputValue(value)}
+            value={this.state.inputValue}
+            onFocus={() => this.onInputFocus() }
+            onBlur={(value) => this.onInputBlur(value) }
           />
         </div>
         <PageStatusBar
-          hide={this.state.inputHasFocus}
+          hide={this.state.isPageStatusBarVisible}
           onPreviousClick={this.props.onPreviousClick}
           onNextClick={this.props.onNextClick}
         />
@@ -171,20 +176,29 @@ class PageSimpleQuestion extends Component {
     );
   }
 
-  setInputValue(value) {
-    this.setState({inputValue: value});
+  componentWillUnmount() {
+    clearTimeout(this.mTimeout);
   }
 
-  setInputHasFocus(value, delayMillis)
+  onInputFocus() {
+    this.setPageStatusBarVisibility(true,0);
+  }
+
+  onInputBlur(value) {
+    this.setState({inputValue:value});
+    this.props.onUserInput(value);
+    this.setPageStatusBarVisibility(false,500);
+  }
+
+  setPageStatusBarVisibility(value, delayMillis)
   {
     clearTimeout(this.mTimeout);
     if(delayMillis===0) {
-      this.setState({inputHasFocus: value});
+      this.setState({isPageStatusBarVisible: value});
     }
     else {
-      this.props.onUserInput(this.state.inputValue);
       this.mTimeout = setTimeout(() => {
-        this.setState({inputHasFocus: value});
+        this.setState({isPageStatusBarVisible: value});
       },delayMillis);
     }
   }

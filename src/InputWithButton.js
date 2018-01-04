@@ -10,16 +10,16 @@ class InputWithButton extends Component
       inputValue: props.value,
     };
     this.mTimeout = 0;
-
-    this.onInputFocus = this.onInputFocus.bind(this);
-    this.onInputBlur = this.onInputBlur.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
-    this.setButtonVisible = this.setButtonVisible.bind(this);
-    this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
+    // this.onInputFocus = this.onInputFocus.bind(this);
+    // this.onInputBlur = this.onInputBlur.bind(this);
+    // this.onInputChange = this.onInputChange.bind(this);
+    // this.setButtonVisible = this.setButtonVisible.bind(this);
+    // this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("setting " + this.state.inputValue + " to " + nextProps.value);
+    console.log("InputWithButton: setting current state " + this.state.inputValue +
+      " to next props " + nextProps.value);
     this.setState({inputValue: nextProps.value});
   }
 
@@ -45,16 +45,13 @@ class InputWithButton extends Component
   }
 
   onInputFocus() {
-    this.setButtonVisible(true,0);
+    this.setButtonVisible(true,0); // show button
     if(typeof this.props.onFocus === "function") { this.props.onFocus(); }
   }
 
   onInputBlur() {
-    this.setButtonVisible(false,200);
-    if(typeof this.props.onBlur === "function") { this.props.onBlur(); }
-    if(typeof this.props.onUserInput === "function") {
-      this.props.onUserInput(this.state.inputValue);
-    }
+    this.setButtonVisible(false,200); // hide button, after short delay
+    if(typeof this.props.onBlur === "function") { this.props.onBlur(this.state.inputValue); }
   }
 
   onInputChange(event) {
@@ -63,7 +60,7 @@ class InputWithButton extends Component
 
   setButtonVisible(value, delayMillis)
   {
-    clearTimeout(this.mTimeout);
+    clearTimeout(this.mTimeout); // clear any previous timeouts
     if(delayMillis===0) {
       this.setState({buttonVisible: value});
     }
@@ -73,7 +70,6 @@ class InputWithButton extends Component
       },delayMillis);
     }
   }
-
 }
 
 export default InputWithButton;
