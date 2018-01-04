@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import InputWithButton from './InputWithButton.js';
+import TextareaWithButton from './TextareaWithButton.js';
 import './Page.css';
 import babas_logo from './img/babas_logo.png';
 
@@ -24,7 +25,8 @@ export class PageLanding extends Component {
   }
 }
 
-export class PageSimpleQuestionShortAnswer extends Component {
+/** abstract base class */
+class PageWithStatusBar extends Component {
 
   constructor(props) {
     super(props);
@@ -34,12 +36,27 @@ export class PageSimpleQuestionShortAnswer extends Component {
     this.statusBarVisibilityTimeout = 0;
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.statusBarVisibilityTimeout);
+  }
+
+  setPageStatusBarVisible(value, delayMillis = 0)
+  {
+    clearTimeout(this.statusBarVisibilityTimeout);
+    this.statusBarVisibilityTimeout = setTimeout(() => {
+      this.setState({isPageStatusBarVisible: value});
+    },delayMillis);
+  }
+}
+
+export class PageSimpleQuestionShortAnswer extends PageWithStatusBar {
+
   render() {
     return (
       <div className="Page">
 
         <div className="Page__simpleQuestionShortAnswer">
-          <div className="Page__simpleQuestionHeader">{this.props.questionText}</div>
+          <div className="Page__simpleQuestionHeader Page__simpleQuestionHeader--mid">{this.props.questionText}</div>
           <InputWithButton
             value={this.props.inputValue}
             onFocus={() => this.onInputFocus() }
@@ -55,10 +72,6 @@ export class PageSimpleQuestionShortAnswer extends Component {
     );
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.statusBarVisibilityTimeout);
-  }
-
   onInputFocus() {
     this.setPageStatusBarVisible(true);
   }
@@ -67,33 +80,21 @@ export class PageSimpleQuestionShortAnswer extends Component {
     this.props.onUserInput(value);
     this.setPageStatusBarVisible(false,500);
   }
-
-  setPageStatusBarVisible(value, delayMillis = 0)
-  {
-    clearTimeout(this.statusBarVisibilityTimeout);
-    this.statusBarVisibilityTimeout = setTimeout(() => {
-      this.setState({isPageStatusBarVisible: value});
-    },delayMillis);
-  }
 }
 
-export class PageSimpleQuestionLongAnswer extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isPageStatusBarVisible: false,
-    };
-    this.statusBarVisibilityTimeout = 0;
-  }
+export class PageSimpleQuestionLongAnswer extends PageWithStatusBar {
 
   render() {
     return (
       <div className="Page">
 
-        <div className="Page-Simple-Question-Long-Answer">
-          <div className="Page__simpleQuestionHeader">{this.props.questionText}</div>
-          <textarea value="Here is some text." />
+        <div className="Page__simpleQuestionLongAnswer">
+          <div className="Page__simpleQuestionHeader Page__simpleQuestionHeader--upper">{this.props.questionText}</div>
+          <TextareaWithButton
+            value={this.props.inputValue}
+            onFocus={() => this.onInputFocus() }
+            onBlur={(value) => this.onInputBlur(value) }
+          />
         </div>
         <PageStatusBar
           hide={this.state.isPageStatusBarVisible}
@@ -104,10 +105,6 @@ export class PageSimpleQuestionLongAnswer extends Component {
     );
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.statusBarVisibilityTimeout);
-  }
-
   onInputFocus() {
     this.setPageStatusBarVisible(true);
   }
@@ -115,14 +112,6 @@ export class PageSimpleQuestionLongAnswer extends Component {
   onInputBlur(value) {
     this.props.onUserInput(value);
     this.setPageStatusBarVisible(false,500);
-  }
-
-  setPageStatusBarVisible(value, delayMillis = 0)
-  {
-    clearTimeout(this.statusBarVisibilityTimeout);
-    this.statusBarVisibilityTimeout = setTimeout(() => {
-      this.setState({isPageStatusBarVisible: value});
-    },delayMillis);
   }
 }
 

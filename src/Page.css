@@ -71,6 +71,10 @@
   padding-top:110px;
 }
 
+.Page__simpleQuestionLongAnswer {
+  display: block;
+}
+
 .Page__statusBar {
   position: fixed;
   width: 100%;

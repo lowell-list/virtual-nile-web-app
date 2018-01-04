@@ -1,0 +1,57 @@
+.TextareaWithButton {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0;
+  border: 0;
+}
+
+.TextareaWithButton__textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 200px;
+  resize: none;
+
+  padding: 10px;
+  border: #22BBB4 2px solid;
+  font-family: LuloCleanOne, sans-serif;
+  font-size: 16px;
+  color: #000000;
+}
+
+.TextareaWithButton__textarea:focus {
+  outline: none;
+}
+
+.TextareaWithButton__button {
+  position: relative;
+  display: block;
+  /* this is a hack; would prefer a solution that vertical-centers the button on the input */
+  top: -54px;
+  right: 14px;
+  margin-left: auto;
+  padding: 8px;
+
+  background: #FBAF5F;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border: 0;
+  border-radius: 10px;
+  font-family: LuloCleanOneBold, sans-serif;
+  font-size: 18px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.TextareaWithButton__button:hover {
+  text-decoration: none;
+}
+
+.TextareaWithButton__button:focus {
+  background: #e0e0e0;
+  outline: none;
+  -webkit-box-shadow: inset 0px 0px 4px #ccc;
+  -moz-box-shadow: inset 0px 0px 4px #ccc;
+  box-shadow: inset 0px 0px 4px #ccc;
+}

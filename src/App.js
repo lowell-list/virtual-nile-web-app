@@ -107,7 +107,7 @@ class App extends Component {
             this.setState({email:value});
             localStorage.setItem(LSK_EMAIL,value);
             if(value!=null && value.length>0) {
-              console.log("ready for next screen!!");
+              this.changePage(PID_5_1_ENTER_DREAM, 600);
             }
           }}
         />;
