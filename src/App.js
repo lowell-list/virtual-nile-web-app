@@ -79,27 +79,27 @@ class App extends Component {
       default:
       case PID_1_1_LANDING:
         return <PageLanding
-          onStartClick={() => this.onPageIdSelected(PID_3_1_ENTER_NAME)}
+          onStartClick={() => this.changePage(PID_3_1_ENTER_NAME)}
         />;
       case PID_3_1_ENTER_NAME:
         return <PageSimpleQuestion
           questionText={"What's your name?"}
           currentInputValue={this.state.screenName}
-          onPreviousClick={() => this.onPageIdSelected(PID_1_1_LANDING)}
-          onNextClick={() => this.onPageIdSelected(PID_4_1_ENTER_EMAIL)}
+          onPreviousClick={() => this.changePage(PID_1_1_LANDING)}
+          onNextClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
           onUserInput={(value) => {
             this.setState({screenName:value});
             localStorage.setItem(LSK_SCREEN_NAME,value);
-            // if(value!=null && value.length>0) {
-            //   this.onPageIdSelected(PID_4_1_ENTER_EMAIL);
-            // }
+            if(value!=null && value.length>0) {
+              this.changePage(PID_4_1_ENTER_EMAIL, 600);
+            }
           }}
         />;
       case PID_4_1_ENTER_EMAIL:
         return <PageSimpleQuestion
           questionText={`${this.state.screenName}, what's your email?`}
           currentInputValue={this.state.email}
-          onPreviousClick={() => this.onPageIdSelected(PID_3_1_ENTER_NAME)}
+          onPreviousClick={() => this.changePage(PID_3_1_ENTER_NAME)}
           onNextClick={() => console.log("There is no next page yet.")}
           onUserInput={(value) => {
             this.setState({email:value});
@@ -112,12 +112,14 @@ class App extends Component {
     }
   }
 
-  onPageIdSelected(pageId) {
-    console.log("page selected: " + pageId);
-    this.setState({
-      currentPageId: pageId
-    });
-    sessionStorage.setItem(SSK_CURRENT_PAGE_ID,pageId);
+  changePage(pageId, delayMillis = 0)
+  {
+    clearTimeout(this.pageChangeTimeout);
+    this.pageChangeTimeout = setTimeout(() => {
+      console.log("page selected: " + pageId);
+      this.setState({ currentPageId: pageId });
+      sessionStorage.setItem(SSK_CURRENT_PAGE_ID,pageId);
+    },delayMillis);
   }
 }
 
