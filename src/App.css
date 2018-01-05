@@ -92,7 +92,8 @@ examples:
   box-shadow: inset 0px 0px 4px #ccc;
 }
 
-.App__errorMessage {
+.App__modalMessage {
   font-family: LuloCleanOneBold, sans-serif;
   font-size: 16px;
+  margin-bottom: 20px;
 }

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './TextareaWithButton.css';
+const R = require('ramda');
 
 class TextareaWithButton extends Component
 {
@@ -40,12 +41,12 @@ class TextareaWithButton extends Component
 
   onTextareaFocus() {
     this.setButtonVisible(true); // show button
-    if(typeof this.props.onFocus === "function") { this.props.onFocus(); }
+    if(R.is(Function,this.props.onFocus)) { this.props.onFocus(); }
   }
 
   onTextareaBlur() {
     this.setButtonVisible(false,200); // hide button, after short delay
-    if(typeof this.props.onBlur === "function") { this.props.onBlur(this.state.textareaValue); }
+    if(R.is(Function,this.props.onBlur)) { this.props.onBlur(this.state.textareaValue); }
   }
 
   onTextareaChange(event) {

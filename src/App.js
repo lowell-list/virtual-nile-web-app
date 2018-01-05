@@ -3,6 +3,11 @@ import {PageLanding, PageSimpleQuestionLongAnswer, PageSimpleQuestionShortAnswer
 import Modal from 'simple-react-modal';
 import './App.css';
 import {randomAlphaNumericString} from './Util';
+const R = require('ramda');
+
+/**************************************************************************
+ * CONSTANTS
+ **************************************************************************/
 
 // page IDs
 const PID_1_1_LANDING           = '1.1-landing';
@@ -22,12 +27,16 @@ const SSK_DREAM_TEXT            = 'dreamText';
 // valid location IDs
 const VALID_LOCATION_IDS        = [ 'babas_pdx_bethany', 'babas_pdx_cascade' ];
 
+/**************************************************************************
+ * MAIN COMPONENT
+ **************************************************************************/
+
 class App extends Component {
 
   constructor(props) {
     super(props);
 
-    let constructorError = null;
+    let constructorModalMessage = null;
 
     // determine location ID from query string
     let urlParams = new URLSearchParams(window.location.search);
@@ -36,10 +45,8 @@ class App extends Component {
       console.log("valid location ID found in query string: " + queryLocationId);
     }
     else {
-      constructorError = {
-        message: "no valid location ID found in query string",
-        allowCancel: false
-      };
+      constructorModalMessage =
+        this.makeModalMessageObject("no valid location ID found in query string",false);
     }
 
     // determine user ID
@@ -68,27 +75,21 @@ class App extends Component {
       screenName: screenName,
       email: email,
       dreamText: dreamText,
-      modalMessage: null,
-      error: constructorError
+      modalMessage: constructorModalMessage,
     };
 
     this.pageChangeTimeout = 0;
   }
 
-  getCachedValue(key, defaultValue, storage, description) {
-    let value = defaultValue;
-    let cachedValue = storage.getItem(key);
-    if(cachedValue!=null) {
-      value = cachedValue;
-      console.log(`using cached ${description}: ${value}`);
-    }
-    return value;
-  }
+  /**************************************************************************
+   * REACT LIFECYCLE
+   **************************************************************************/
 
   render() {
     return (
       <div className="App">
-        {(this.state.error==null) ? this.currentPage() : this.errorModal()}
+        {this.currentPage()}
+        {this.modalMessage()}
       </div>
     );
   }
@@ -96,6 +97,10 @@ class App extends Component {
   componentWillUnmount() {
     clearTimeout(this.pageChangeTimeout);
   }
+
+  /**************************************************************************
+   * COMPONENTS
+   **************************************************************************/
 
   /** returns the current Page based on the current page ID */
   currentPage() {
@@ -139,20 +144,41 @@ class App extends Component {
             questionText={`${this.state.screenName}, tell us about your dream`}
             inputValue={this.state.dreamText}
             onPreviousClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
-            onNextClick={() => console.log("There is no next page yet; coming soon...")}
-            onDoneClick={() => console.log("done") }
+            onNextClick={() => this.submitDream()}
+            onDoneClick={() => this.submitDream()}
             onUserInput={(value) => {
               this.setState({dreamText:value});
               sessionStorage.setItem(SSK_DREAM_TEXT,value);
-              if(value!=null && value.length>0) {
-                // this.setState({modalMessage:"ready for next screen!!"});
-                console.log("ready for next screen!!");
-              }
             }}
           />
         )
     }
   }
+
+  /** optionally displays a modal message */
+  modalMessage() {
+    return (
+      <Modal
+        containerStyle={{padding: '20px', width: '90%'}}
+        style={{transition: 'opacity 150ms ease-in'}}
+        show={(this.state.modalMessage!=null)}
+        closeOnOuterClick={(this.state.modalMessage!=null)?this.state.modalMessage.allowCancel:true}
+        onClose={() => this.onModalMessageClose()}
+        transitionSpeed={150}
+      >
+        <div className="App__modalMessage">
+          {(this.state.modalMessage!=null)?this.state.modalMessage.message:""}
+        </div>
+        {this.state.modalMessage!=null && this.state.modalMessage.allowCancel &&
+        <button className="AppTheme__button--blue" onClick={() => this.onModalMessageClose()}>OK</button>
+        }
+      </Modal>
+    )
+  }
+
+  /**************************************************************************
+   * ACTIONS
+   **************************************************************************/
 
   changePage(pageId, delayMillis = 0)
   {
@@ -164,21 +190,64 @@ class App extends Component {
     },delayMillis);
   }
 
-  errorModal() {
-    return (
-      <Modal
-        containerStyle={{padding: '20px', width: '90%'}}
-        show={(this.state.error!=null)}
-        closeOnOuterClick={this.state.error.allowCancel}
-        onClose={() => this.onErrorModalClose()}
-      >
-        <div className="App__errorMessage">{this.state.error.message}</div>
-      </Modal>
-    )
+  submitDream() {
+    if(!this.isScreenNameValid(this.state.screenName)) {
+      this.setModalMessage("screen name is not valid; cannot continue");
+      return;
+    }
+    if(!this.isEmailValid(this.state.email)) {
+      this.setModalMessage("email is not valid; cannot continue");
+      return;
+    }
   }
 
-  onErrorModalClose() {
-    if(this.state.error.allowCancel) { this.setState({error: null}); }
+  /**************************************************************************
+   * MODAL MESSAGE
+   **************************************************************************/
+
+  onModalMessageClose() {
+    if(this.state.modalMessage.allowCancel) { this.clearModalMessage(); }
+  }
+
+  clearModalMessage() {
+    this.setState({modalMessage: null});
+  }
+
+  setModalMessage(text, allowCancel = true) {
+    this.setState({modalMessage: this.makeModalMessageObject(text, allowCancel)});
+  }
+
+  makeModalMessageObject(text, allowCancel) {
+    return {
+      message: text,
+      allowCancel: allowCancel,
+    };
+  }
+
+  /**************************************************************************
+   * UTILITY
+   **************************************************************************/
+
+  getCachedValue(key, defaultValue, storage, description) {
+    let value = defaultValue;
+    let cachedValue = storage.getItem(key);
+    if(cachedValue!=null) {
+      value = cachedValue;
+      console.log(`using cached ${description}: ${value}`);
+    }
+    return value;
+  }
+
+  isScreenNameValid(screenName) {
+    return (R.is(String,screenName) && !R.isEmpty(screenName));
+  }
+
+  isEmailValid(email) {
+    return false;
+  }
+
+  isDreamTextValid(dreamText) {
+    return true;
   }
 
 }
