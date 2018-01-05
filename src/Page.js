@@ -65,6 +65,7 @@ export class PageSimpleQuestionShortAnswer extends PageWithStatusBar {
         </div>
         <PageStatusBar
           visible={this.state.isPageStatusBarVisible}
+          nextEnabled={true}
           onPreviousClick={this.props.onPreviousClick}
           onNextClick={this.props.onNextClick}
         />
@@ -98,11 +99,14 @@ export class PageSimpleQuestionLongAnswer extends PageWithStatusBar {
         </div>
         <button className="Page__buttonOverStatusBar AppTheme__button--blue"
                 style={{visibility:(this.state.isPageStatusBarVisible?'visible':'hidden')}}
-                onClick={this.props.onDoneClick}>
-          Done!
+                onClick={this.props.onDoneClick}
+                disabled={!this.props.nextEnabled}
+                >
+          {(this.props.nextEnabled ? 'Done!' : 'Submitting...')}
         </button>
         <PageStatusBar
           visible={this.state.isPageStatusBarVisible}
+          nextEnabled={false}
           onPreviousClick={this.props.onPreviousClick}
           onNextClick={this.props.onNextClick}
         />
@@ -130,9 +134,34 @@ function PageStatusBar(props) {
         {/* TODO: add progressbar here */}
       </div>
       <div className="Page__statusBar__buttons">
-        <button className="Page__statusBar__buttons__button" onClick={props.onPreviousClick}>∧</button>
-        <button className="Page__statusBar__buttons__button" onClick={props.onNextClick}>∨</button>
+        <button
+          className="Page__statusBar__buttons__button"
+          onClick={props.onPreviousClick}
+        >
+          ∧
+        </button>
+        <button
+          className="Page__statusBar__buttons__button"
+          onClick={props.onNextClick}
+          disabled={!props.nextEnabled}
+        >
+          ∨
+        </button>
       </div>
     </div>
   )
 }
+
+export class PageDreamConfirmed extends Component {
+
+  render() {
+    return (
+      <div className="Page">
+        <img src={babas_logo} className="App__babasLogo" alt="babas_logo" />
+        <p className="Page__header1">{this.props.confirmationText}</p>
+        <button className="Page__startButton AppTheme__button--blue" onClick={this.props.onNextClick}>Return...</button>
+      </div>
+    );
+  }
+}
+

@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "http://nile.babasmg.com/webapp",
   "dependencies": {
+    "axios": "^0.17.1",
     "ramda": "^0.25.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

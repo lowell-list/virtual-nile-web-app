@@ -107,6 +107,7 @@
   outline: none;
 }
 
+.Page__statusBar__buttons__button:disabled,
 .Page__statusBar__buttons__button:active {
   background: darkgray;
   outline: none;
