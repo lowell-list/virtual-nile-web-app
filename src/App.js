@@ -162,7 +162,11 @@ class App extends Component {
       case PID_6_2_DREAM_CONFIRMED:
         return <PageDreamConfirmed
           confirmationText={`${this.state.screenName}, your dream has been added to the Virtual Nile!`}
-          onNextClick={() => this.changePage(PID_1_1_LANDING)}
+          onNextClick={() => {
+            // change session-stored page ID so the landing page will show upon next visit
+            sessionStorage.setItem(SSK_CURRENT_PAGE_ID,PID_1_1_LANDING);
+            window.location.href = "https://www.babasmg.com";
+          }}
         />;
     }
   }
@@ -182,7 +186,7 @@ class App extends Component {
           {(this.state.modalMessage!=null)?this.state.modalMessage.message:""}
         </div>
         {this.state.modalMessage!=null && this.state.modalMessage.allowCancel &&
-        <button className="AppTheme__button--blue" onClick={() => this.onModalMessageClose()}>OK</button>
+        <button className="AppTheme__largeButton AppTheme__largeButton--blue" onClick={() => this.onModalMessageClose()}>OK</button>
         }
       </Modal>
     )
@@ -236,7 +240,7 @@ class App extends Component {
       else {
         console.log(response);
         // TODO: save dream ID for future lookup
-        sessionStorage.setItem(SSK_DREAM_TEXT,'');
+        sessionStorage.setItem(SSK_DREAM_TEXT,''); // clear session-stored dream text
         this.setState({dreamText:''});
         this.changePage(PID_6_2_DREAM_CONFIRMED);
       }

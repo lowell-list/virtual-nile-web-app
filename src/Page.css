@@ -3,14 +3,29 @@
   padding: 20px;
 }
 
+.Page__babasLogo {
+  width: 100%;
+}
+
 .Page__header1 {
   font-family: LuloCleanOneBold, sans-serif;
+}
+
+.Page__header1--blue {
   color: #24bab5;
+}
+
+.Page__header1--white {
+  color: #ffffff;
 }
 
 .Page__normalText {
   font-family: LuloCleanOne, sans-serif;
   font-size: 12px;
+}
+
+.Page__normalText--white {
+  color: #ffffff;
 }
 
 .Page__videoWrapper {
@@ -28,9 +43,12 @@
   height: 100%;
 }
 
-.Page__startButton {
+.Page__nextButton {
   position: fixed;
+  box-sizing: border-box;
   width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 20px;
 }
 
@@ -62,6 +80,27 @@
 
 .Page__simpleQuestionLongAnswer {
   display: block;
+}
+
+.Page__dreamConfirmed {
+  text-align: center;
+}
+
+.Page__babasLogoSmall {
+  width: 35%;
+}
+
+.Page__iconCheckmark {
+  width: 35%;
+}
+
+.Page__fullBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 
 .Page__statusBar {

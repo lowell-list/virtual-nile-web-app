@@ -3,23 +3,25 @@ import InputWithButton from './InputWithButton.js';
 import TextareaWithButton from './TextareaWithButton.js';
 import './Page.css';
 import babas_logo from './img/babas_logo.png';
+import babas_logo_small from './img/babas_logo_small.png';
+import icon_checkmark from './img/icon_checkmark.png';
 
 export class PageLanding extends Component {
 
   render() {
     return (
       <div className="Page">
-        <img src={babas_logo} className="App__babasLogo" alt="babas_logo" />
+        <img src={babas_logo} className="Page__babasLogo" alt="babas_logo" />
         <div className="Page__videoWrapper">
           <iframe title="introVideo" className="Page__video" src="https://www.youtube.com/embed/yFw5KORObxA" frameBorder="0" gesture="media" allow="encrypted-media" allowFullScreen/>
         </div>
-        <p className="Page__header1">Let us help make your dream come true!</p>
+        <p className="Page__header1 Page__header1--blue">Let us help make your dream come true!</p>
         <p className="Page__normalText">Lorem ipsum dolor sit amet, ea vim viris detraxit instructior. Vim liber iudico cetero an, ex vidit noluisse cum, ei nam nibh invidunt. Cum id erat regione integre. Per ei luptatum atomorum, an brute constituto conclusionemque sed.</p>
         <p className="Page__normalText">Causae delectus gubergren an vis. Moderatius consequuntur vel ex. Ut mel nisl aliquando, an usu probo lorem graeco, sit ex denique argumentum. Eu simul veritus percipit nam. Qui ut mutat iusto. Sit utinam aliquip fuisset id, utroque verterem ius ad.</p>
         <p className="Page__normalText">Eos populo delenit repudiandae id, in eripuit imperdiet mel, iuvaret dolores vis id. Menandri scripserit sed in, eam in mollis expetenda repudiandae. Ne eros error hendrerit mea. Ut usu libris virtute. At enim falli accommodare vis.</p>
         <p className="Page__normalText">Ut modo aeterno concludaturque pri, eu voluptua ullamcorper sit. Eu sea elitr constituto, vel cibo alterum inermis te. Omnium nostrum ne mea. Ut vis summo choro animal, pri cu ullum cetero eripuit.</p>
         <p className="Page__normalText">Mea eu augue omnium timeam, eu salutatus disputationi vel, id wisi saepe delicata has. An eum odio inermis. Quo nibh intellegat interesset an. Soluta prompta cu per, ut quidam bonorum epicurei sit.</p>
-        <button className="Page__startButton AppTheme__button--blue" onClick={this.props.onStartClick}>Start!</button>
+        <button className="Page__nextButton AppTheme__largeButton AppTheme__largeButton--blue" onClick={this.props.onStartClick}>Start!</button>
       </div>
     );
   }
@@ -97,7 +99,7 @@ export class PageSimpleQuestionLongAnswer extends PageWithStatusBar {
             onBlur={(value) => this.onInputBlur(value) }
           />
         </div>
-        <button className="Page__buttonOverStatusBar AppTheme__button--blue"
+        <button className="Page__buttonOverStatusBar AppTheme__largeButton AppTheme__largeButton--blue"
                 style={{visibility:(this.state.isPageStatusBarVisible?'visible':'hidden')}}
                 onClick={this.props.onDoneClick}
                 disabled={!this.props.nextEnabled}
@@ -156,10 +158,14 @@ export class PageDreamConfirmed extends Component {
 
   render() {
     return (
-      <div className="Page">
-        <img src={babas_logo} className="App__babasLogo" alt="babas_logo" />
-        <p className="Page__header1">{this.props.confirmationText}</p>
-        <button className="Page__startButton AppTheme__button--blue" onClick={this.props.onNextClick}>Return...</button>
+      <div className="Page Page__dreamConfirmed">
+        <div className="Page__fullBackground" style={{background:'#22BBB4'}}/>
+        <img src={babas_logo_small} className="Page__babasLogoSmall" alt="babas_logo_small" />
+        <p className="Page__header1 Page__header1--white">{this.props.confirmationText}</p>
+        <img src={icon_checkmark} className="Page__iconCheckmark" alt="icon_checkmark" />
+        <p className="Page__normalText Page__normalText--white">Lorem ipsum dolor sit amet, ea vim viris detraxit instructior. Vim liber iudico cetero an, ex vidit noluisse cum, ei nam nibh invidunt. Cum id erat regione integre. Per ei luptatum atomorum, an brute constituto conclusionemque sed.</p>
+        <br/><br/><br/>
+        <button className="Page__nextButton AppTheme__largeButton AppTheme__largeButton--orange" onClick={this.props.onNextClick}>Return to babasmg.com</button>
       </div>
     );
   }

@@ -22,32 +22,36 @@ examples:
   display: block;
 }
 
-.App__babasLogo {
-  width: 100%;
-}
-
-.AppTheme__button--blue {
+.AppTheme__largeButton {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
   font-family: LuloCleanOneBold, sans-serif;
   color: #ffffff;
-  font-size: 20px;
-  background: #24bab5;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
   border: none;
 }
 
-.AppTheme__button--blue:hover {
+.AppTheme__largeButton--blue {
+  background: #24bab5;
+  font-size: 20px;
+}
+
+.AppTheme__largeButton--orange {
+  background: #FBAF5F;
+  font-size: 14px;
+}
+
+.AppTheme__largeButton:hover {
   text-decoration: none;
 }
 
-.AppTheme__button--blue:focus {
+.AppTheme__largeButton:focus {
   outline: none;
 }
 
-.AppTheme__button--blue:active {
+.AppTheme__largeButton:active {
   background: #e0e0e0;
   outline: none;
   -webkit-box-shadow: inset 0px 0px 4px #ccc;
