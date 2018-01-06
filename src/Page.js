@@ -68,7 +68,7 @@ export class PageSimpleQuestionShortAnswer extends PageWithStatusBar {
         </div>
         <PageStatusBar
           visible={this.state.isPageStatusBarVisible}
-          nextEnabled={true}
+          nextEnabled={this.props.nextEnabled}
           onPreviousClick={this.props.onPreviousClick}
           onNextClick={this.props.onNextClick}
         />
@@ -102,10 +102,10 @@ export class PageSimpleQuestionLongAnswer extends PageWithStatusBar {
         </div>
         <button className="Page__buttonOverStatusBar AppTheme__largeButton AppTheme__largeButton--blue"
                 style={{visibility:(this.state.isPageStatusBarVisible?'visible':'hidden')}}
-                onClick={this.props.onDoneClick}
+                onClick={this.props.onNextClick}
                 disabled={!this.props.nextEnabled}
                 >
-          {(this.props.nextEnabled ? 'Done!' : 'Submitting...')}
+          {this.props.doneButtonLabel}
         </button>
         <PageStatusBar
           visible={this.state.isPageStatusBarVisible}

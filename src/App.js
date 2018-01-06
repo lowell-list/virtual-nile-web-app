@@ -4,6 +4,7 @@ import Modal from 'simple-react-modal';
 import Axios from 'axios';
 import './App.css';
 import {randomAlphaNumericString} from './Util';
+import Blacklist from './Blacklist';
 const R = require('ramda');
 
 /**************************************************************************
@@ -122,38 +123,38 @@ class App extends Component {
         return <PageSimpleQuestionShortAnswer
           questionText={"What's your name?"}
           inputValue={this.state.screenName}
+          nextEnabled={this.isScreenNameValid(this.state.screenName)}
           onPreviousClick={() => this.changePage(PID_1_1_LANDING)}
           onNextClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
           onUserInput={(value) => {
             this.setState({screenName:value});
             localStorage.setItem(LSK_SCREEN_NAME,value);
-            if(value!=null && value.length>0) {
-              this.changePage(PID_4_1_ENTER_EMAIL, 600);
-            }
+            if(this.isScreenNameValid(value)) { this.changePage(PID_4_1_ENTER_EMAIL, 600); }
+            else { this.setModalMessage("screen name is not valid; please review"); }
           }}
         />;
       case PID_4_1_ENTER_EMAIL:
         return <PageSimpleQuestionShortAnswer
           questionText={`${this.state.screenName}, what's your email?`}
           inputValue={this.state.email}
+          nextEnabled={this.isEmailValid(this.state.email)}
           onPreviousClick={() => this.changePage(PID_3_1_ENTER_NAME)}
           onNextClick={() => this.changePage(PID_5_1_ENTER_DREAM)}
           onUserInput={(value) => {
             this.setState({email:value});
             localStorage.setItem(LSK_EMAIL,value);
-            if(value!=null && value.length>0) {
-              this.changePage(PID_5_1_ENTER_DREAM, 600);
-            }
+            if(this.isEmailValid(value)) { this.changePage(PID_5_1_ENTER_DREAM, 600); }
+            else { this.setModalMessage("email is not valid; please review"); }
           }}
         />;
       case PID_5_1_ENTER_DREAM:
         return <PageSimpleQuestionLongAnswer
           questionText={`${this.state.screenName}, tell us about your dream`}
           inputValue={this.state.dreamText}
-          nextEnabled={!this.state.dreamSubmitInProgress}
+          nextEnabled={this.isDreamTextValid(this.state.dreamText) && !this.state.dreamSubmitInProgress}
+          doneButtonLabel={this.state.dreamSubmitInProgress ? 'Submitting...' : 'Done!'}
           onPreviousClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
           onNextClick={() => this.submitDream()}
-          onDoneClick={() => this.submitDream()}
           onUserInput={(value) => {
             this.setState({dreamText:value});
             sessionStorage.setItem(SSK_DREAM_TEXT,value);
@@ -208,20 +209,6 @@ class App extends Component {
 
   submitDream()
   {
-    // validate all user inputs, again
-    if(!this.isScreenNameValid(this.state.screenName)) {
-      this.setModalMessage("screen name is not valid; please review");
-      return;
-    }
-    if(!this.isEmailValid(this.state.email)) {
-      this.setModalMessage("email is not valid; please review");
-      return;
-    }
-    if(!this.isDreamTextValid(this.state.dreamText)) {
-      this.setModalMessage("dream text is not valid; please review");
-      return;
-    }
-
     // set state so that other components can reflect that we're submitting
     this.setState({dreamSubmitInProgress:true});
 
@@ -315,7 +302,7 @@ class App extends Component {
   }
 
   isScreenNameValid(value) {
-    return (R.is(String,value) && !R.isEmpty(value));
+    return (R.is(String,value) && !R.isEmpty(value) && Blacklist.isScreenNameValid(value));
   }
 
   isEmailValid(value) {

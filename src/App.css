@@ -51,6 +51,7 @@ examples:
   outline: none;
 }
 
+.AppTheme__largeButton:disabled,
 .AppTheme__largeButton:active {
   background: #e0e0e0;
   outline: none;
