@@ -96,8 +96,8 @@ export class PageSimpleQuestionLongAnswer extends PageWithStatusBar {
           <div className="Page__simpleQuestionHeader Page__simpleQuestionHeader--upper">{this.props.questionText}</div>
           <TextareaWithButton
             value={this.props.inputValue}
-            onFocus={() => this.onInputFocus() }
-            onBlur={(value) => this.onInputBlur(value) }
+            onFocus={() => this.onInputFocus()}
+            onBlur={(value) => this.onInputBlur(value)}
           />
         </div>
         <button className="Page__buttonOverStatusBar AppTheme__largeButton AppTheme__largeButton--blue"

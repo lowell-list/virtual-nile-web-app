@@ -26,6 +26,7 @@ class TextareaWithButton extends Component
                   onFocus={() => this.onTextareaFocus()}
                   onBlur={() => this.onTextareaBlur()}
                   onChange={(event) => this.onTextareaChange(event)}
+                  onKeyPress={(event) => this.onTextareaKeyPress(event)}
                   maxLength={DREAM_TEXT_MAX_LENGTH}
         />
         <input type="button" className="TextareaWithButton__button AppTheme__button--smallOrange"
@@ -48,6 +49,13 @@ class TextareaWithButton extends Component
   onTextareaBlur() {
     this.setButtonVisible(false,200); // hide button, after short delay
     if(R.is(Function,this.props.onBlur)) { this.props.onBlur(this.state.textareaValue); }
+  }
+
+  onTextareaKeyPress(event) {
+    // silently disallow the Enter key
+    if(event.key==='Enter') {
+      event.preventDefault();
+    }
   }
 
   onTextareaChange(event) {

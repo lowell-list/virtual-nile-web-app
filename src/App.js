@@ -158,7 +158,13 @@ class App extends Component {
           onUserInput={(value) => {
             this.setState({dreamText:value});
             sessionStorage.setItem(SSK_DREAM_TEXT,value);
-            if(!App.isDreamTextValid(value)) { this.setModalMessage("dream text is not valid; please review"); }
+            if(!App.isDreamTextValid(value)) {
+              if(value.indexOf('\n')!==-1) {
+                this.setModalMessage("dream text may not contain new lines; please review");
+              } else {
+                this.setModalMessage("dream text is not valid; please review");
+              }
+            }
           }}
         />;
       case PID_6_2_DREAM_CONFIRMED:
@@ -306,7 +312,7 @@ class App extends Component {
     return (
       R.is(String,value) &&
       !R.isEmpty(value) &&
-      // NOTE: regex copied from AWS API Gateway model; these should match
+      // NOTE: regex copied from AWS API Gateway model; these should match exactly
       // NOTE: API Gateway requires '\' characters to be escaped
       /^[a-zA-Z]{1,30}$/.test(value) &&
       Blacklist.isNameClean(value)
@@ -317,21 +323,19 @@ class App extends Component {
     return (
       R.is(String,value) &&
       !R.isEmpty(value) &&
-      // NOTE: regex copied from AWS API Gateway model; these should match
+      // NOTE: regex copied from AWS API Gateway model; these should match exactly
       // NOTE: API Gateway requires '\' characters to be escaped
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,8}$/.test(value)
     );
   }
 
   static isDreamTextValid(value) {
-    // TODO: apply same checks here as in API
     return (
       R.is(String,value) &&
       !R.isEmpty(value) &&
-      // NOTE: regex copied from AWS API Gateway model; these should match
+      // NOTE: regex copied from AWS API Gateway model; these should match exactly
       // NOTE: API Gateway requires '\' characters to be escaped
-      // NOTE: For some reason, API Gateway will not allow newline characters (?)
-      /^[\s\S]{1,280}$/.test(value)
+      /^.{1,280}$/.test(value)
     );
   }
 
