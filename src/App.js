@@ -52,12 +52,12 @@ class App extends Component {
     }
     else {
       constructorModalMessage =
-        this.makeModalMessageObject(
+        App.makeModalMessageObject(
           {message:"no valid location ID found in query string",allowCancel:false});
     }
 
     // determine user ID
-    let userId = this.getCachedValue(LSK_USER_ID, null, localStorage, 'user ID');
+    let userId = App.getCachedValue(LSK_USER_ID, null, localStorage, 'user ID');
     if(userId==null) {
       // generate a new random user ID and save it for all future use on this device
       userId = randomAlphaNumericString(20,true);
@@ -66,13 +66,13 @@ class App extends Component {
     }
 
     // determine current page ID
-    let currentPageId = this.getCachedValue(
+    let currentPageId = App.getCachedValue(
       SSK_CURRENT_PAGE_ID, PID_1_1_LANDING, sessionStorage, 'current page ID');
 
     // lookup state variables, if they exist
-    let screenName = this.getCachedValue(LSK_SCREEN_NAME, '', localStorage, 'screen name');
-    let email = this.getCachedValue(LSK_EMAIL, '', localStorage, 'email');
-    let dreamText = this.getCachedValue(SSK_DREAM_TEXT, '', sessionStorage, 'dream text');
+    let screenName = App.getCachedValue(LSK_SCREEN_NAME, '', localStorage, 'screen name');
+    let email = App.getCachedValue(LSK_EMAIL, '', localStorage, 'email');
+    let dreamText = App.getCachedValue(SSK_DREAM_TEXT, '', sessionStorage, 'dream text');
 
     // set initial state
     this.state = {
@@ -123,13 +123,13 @@ class App extends Component {
         return <PageSimpleQuestionShortAnswer
           questionText={"What's your name?"}
           inputValue={this.state.screenName}
-          nextEnabled={this.isScreenNameValid(this.state.screenName)}
+          nextEnabled={App.isScreenNameValid(this.state.screenName)}
           onPreviousClick={() => this.changePage(PID_1_1_LANDING)}
           onNextClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
           onUserInput={(value) => {
             this.setState({screenName:value});
             localStorage.setItem(LSK_SCREEN_NAME,value);
-            if(this.isScreenNameValid(value)) { this.changePage(PID_4_1_ENTER_EMAIL, 600); }
+            if(App.isScreenNameValid(value)) { this.changePage(PID_4_1_ENTER_EMAIL, 600); }
             else { this.setModalMessage("screen name is not valid; please review"); }
           }}
         />;
@@ -137,13 +137,13 @@ class App extends Component {
         return <PageSimpleQuestionShortAnswer
           questionText={`${this.state.screenName}, what's your email?`}
           inputValue={this.state.email}
-          nextEnabled={this.isEmailValid(this.state.email)}
+          nextEnabled={App.isEmailValid(this.state.email)}
           onPreviousClick={() => this.changePage(PID_3_1_ENTER_NAME)}
           onNextClick={() => this.changePage(PID_5_1_ENTER_DREAM)}
           onUserInput={(value) => {
             this.setState({email:value});
             localStorage.setItem(LSK_EMAIL,value);
-            if(this.isEmailValid(value)) { this.changePage(PID_5_1_ENTER_DREAM, 600); }
+            if(App.isEmailValid(value)) { this.changePage(PID_5_1_ENTER_DREAM, 600); }
             else { this.setModalMessage("email is not valid; please review"); }
           }}
         />;
@@ -151,14 +151,14 @@ class App extends Component {
         return <PageSimpleQuestionLongAnswer
           questionText={`${this.state.screenName}, tell us about your dream`}
           inputValue={this.state.dreamText}
-          nextEnabled={this.isDreamTextValid(this.state.dreamText) && !this.state.dreamSubmitInProgress}
+          nextEnabled={App.isDreamTextValid(this.state.dreamText) && !this.state.dreamSubmitInProgress}
           doneButtonLabel={this.state.dreamSubmitInProgress ? 'Submitting...' : 'Done!'}
           onPreviousClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
           onNextClick={() => this.submitDream()}
           onUserInput={(value) => {
             this.setState({dreamText:value});
             sessionStorage.setItem(SSK_DREAM_TEXT,value);
-            if(!this.isDreamTextValid(value)) { this.setModalMessage("dream text is not valid; please review"); }
+            if(!App.isDreamTextValid(value)) { this.setModalMessage("dream text is not valid; please review"); }
           }}
         />;
       case PID_6_2_DREAM_CONFIRMED:
@@ -277,10 +277,14 @@ class App extends Component {
   }
 
   setModalMessage(text, allowCancel = true) {
-    this.setState({modalMessage: this.makeModalMessageObject({message:text, allowCancel:allowCancel})});
+    this.setState({modalMessage: App.makeModalMessageObject({message:text, allowCancel:allowCancel})});
   }
 
-  makeModalMessageObject(properties) {
+  /**************************************************************************
+   * STATIC UTILITY
+   **************************************************************************/
+
+  static makeModalMessageObject(properties) {
     let defaults = {
       message: "",
       allowCancel: true,
@@ -288,11 +292,7 @@ class App extends Component {
     return Object.assign(defaults, properties)
   }
 
-  /**************************************************************************
-   * UTILITY
-   **************************************************************************/
-
-  getCachedValue(key, defaultValue, storage, description) {
+  static getCachedValue(key, defaultValue, storage, description) {
     let value = defaultValue;
     let cachedValue = storage.getItem(key);
     if(cachedValue!=null) {
@@ -302,18 +302,37 @@ class App extends Component {
     return value;
   }
 
-  isScreenNameValid(value) {
-    return (R.is(String,value) && !R.isEmpty(value) && Blacklist.isNameClean(value));
+  static isScreenNameValid(value) {
+    return (
+      R.is(String,value) &&
+      !R.isEmpty(value) &&
+      // NOTE: regex copied from AWS API Gateway model; these should match
+      // NOTE: API Gateway requires '\' characters to be escaped
+      /^[a-zA-Z]{1,30}$/.test(value) &&
+      Blacklist.isNameClean(value)
+    );
   }
 
-  isEmailValid(value) {
-    // TODO: apply same checks here as in API
-    return (R.is(String,value) && !R.isEmpty(value));
+  static isEmailValid(value) {
+    return (
+      R.is(String,value) &&
+      !R.isEmpty(value) &&
+      // NOTE: regex copied from AWS API Gateway model; these should match
+      // NOTE: API Gateway requires '\' characters to be escaped
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,8}$/.test(value)
+    );
   }
 
-  isDreamTextValid(value) {
+  static isDreamTextValid(value) {
     // TODO: apply same checks here as in API
-    return (R.is(String,value) && !R.isEmpty(value) && value.length<=DREAM_TEXT_MAX_LENGTH);
+    return (
+      R.is(String,value) &&
+      !R.isEmpty(value) &&
+      // NOTE: regex copied from AWS API Gateway model; these should match
+      // NOTE: API Gateway requires '\' characters to be escaped
+      // NOTE: For some reason, API Gateway will not allow newline characters (?)
+      /^[\s\S]{1,280}$/.test(value)
+    );
   }
 
 }
