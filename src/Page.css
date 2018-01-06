@@ -9,6 +9,7 @@
 
 .Page__header1 {
   font-family: LuloCleanOneBold, sans-serif;
+  text-align: center;
 }
 
 .Page__header1--blue {
@@ -17,6 +18,10 @@
 
 .Page__header1--white {
   color: #ffffff;
+}
+
+.Page__header1--orange {
+  color: #FBAF5F;
 }
 
 .Page__normalText {
