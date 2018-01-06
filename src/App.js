@@ -158,6 +158,7 @@ class App extends Component {
           onUserInput={(value) => {
             this.setState({dreamText:value});
             sessionStorage.setItem(SSK_DREAM_TEXT,value);
+            if(!this.isDreamTextValid(value)) { this.setModalMessage("dream text is not valid; please review"); }
           }}
         />;
       case PID_6_2_DREAM_CONFIRMED:
@@ -302,14 +303,16 @@ class App extends Component {
   }
 
   isScreenNameValid(value) {
-    return (R.is(String,value) && !R.isEmpty(value) && Blacklist.isScreenNameValid(value));
+    return (R.is(String,value) && !R.isEmpty(value) && Blacklist.isNameClean(value));
   }
 
   isEmailValid(value) {
+    // TODO: apply same checks here as in API
     return (R.is(String,value) && !R.isEmpty(value));
   }
 
   isDreamTextValid(value) {
+    // TODO: apply same checks here as in API
     return (R.is(String,value) && !R.isEmpty(value) && value.length<=DREAM_TEXT_MAX_LENGTH);
   }
 
