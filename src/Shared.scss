@@ -1,0 +1,23 @@
+/*
+BEM = block, element, modifier
+examples:
+  myBlock
+  myBlock__myElement
+  myBlock__anotherElement
+  myBlock__anotherElement--large
+  myBlock__anotherElement--green
+*/
+
+/* SASS variables */
+$babas_blue: #22BBB4;
+$babas_orange: #FBAF5F;
+
+@font-face {
+  font-family: LuloCleanOneBold;
+  src: url('./font/Lulo_Clean_One_Bold.otf');
+}
+
+@font-face {
+  font-family: LuloCleanOne;
+  src: url('./font/Lulo_Clean_One.otf');
+}

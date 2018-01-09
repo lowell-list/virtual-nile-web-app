@@ -160,7 +160,7 @@ export class PageDreamConfirmed extends Component {
   render() {
     return (
       <div className="Page Page__dreamConfirmed">
-        <div className="Page__fullBackground" style={{background:'#22BBB4'}}/>
+        <div className="Page__fullBlueBackground"/>
         <img src={babas_logo_small} className="Page__babasLogoSmall" alt="babas_logo_small" />
         <p className="Page__header1 Page__header1--white">{this.props.confirmationText}</p>
         <img src={icon_checkmark} className="Page__iconCheckmark" alt="icon_checkmark" />

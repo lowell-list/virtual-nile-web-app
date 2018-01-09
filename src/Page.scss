@@ -1,3 +1,5 @@
+@import "./Shared.scss";
+
 .Page {
   display: block;
   text-align: center;
@@ -15,7 +17,7 @@
 }
 
 .Page__header1--blue {
-  color: #24bab5;
+  color: $babas_blue;
 }
 
 .Page__header1--white {
@@ -23,7 +25,7 @@
 }
 
 .Page__header1--orange {
-  color: #FBAF5F;
+  color: $babas_orange;
 }
 
 .Page__normalText {
@@ -76,7 +78,7 @@
 .Page__simpleQuestionHeader {
   font-family: LuloCleanOneBold, sans-serif;
   font-size: 14pt;
-  color: #24bab5;
+  color: $babas_blue;
   padding-bottom:10px;
   text-align: center;
 }
@@ -107,12 +109,13 @@
   max-width: 200px;
 }
 
-.Page__fullBackground {
+.Page__fullBlueBackground {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  background: $babas_blue;
   z-index: -1;
 }
 

@@ -1,25 +1,16 @@
-/*
-BEM = block, element, modifier
-examples:
-  myBlock
-  myBlock__myElement
-  myBlock__anotherElement
-  myBlock__anotherElement--large
-  myBlock__anotherElement--green
- */
-
-@font-face {
-  font-family: LuloCleanOneBold;
-  src: url('./font/Lulo_Clean_One_Bold.otf');
-}
-
-@font-face {
-  font-family: LuloCleanOne;
-  src: url('./font/Lulo_Clean_One.otf');
-}
+@import "./Shared.scss";
 
 .App {
   display: block;
+}
+
+.AppTheme__element--blueBorder {
+  border: $babas_blue 2px solid;
+  border-radius: 0;
+}
+
+.AppTheme__element--blueBorder:focus {
+  outline: none;
 }
 
 .AppTheme__largeButton {
@@ -34,12 +25,12 @@ examples:
 }
 
 .AppTheme__largeButton--blue {
-  background: #24bab5;
+  background: $babas_blue;
   font-size: 20px;
 }
 
 .AppTheme__largeButton--orange {
-  background: #FBAF5F;
+  background: $babas_orange;
   font-size: 14px;
 }
 
@@ -60,17 +51,8 @@ examples:
   box-shadow: inset 0px 0px 4px #ccc;
 }
 
-.AppTheme__element--blueBorder {
-  border: #22BBB4 2px solid;
-  border-radius: 0;
-}
-
-.AppTheme__element--blueBorder:focus {
-  outline: none;
-}
-
 .AppTheme__button--smallOrange {
-  background: #FBAF5F;
+  background: $babas_orange;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border: 0;
