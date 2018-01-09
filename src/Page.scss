@@ -3,7 +3,9 @@
 .Page {
   display: block;
   text-align: center;
-  padding: 20px;
+  padding: $page_padding;
+  max-width: $max_component_width;
+  margin: auto;
 }
 
 .Page__babasLogo {
@@ -13,15 +15,14 @@
 
 .Page__header1 {
   font-family: LuloCleanOneBold, sans-serif;
-  text-align: center;
 }
 
 .Page__header1--blue {
   color: $babas_blue;
 }
 
-.Page__header1--white {
-  color: #ffffff;
+.Page__header1--light {
+  color: $light_text;
 }
 
 .Page__header1--orange {
@@ -29,13 +30,14 @@
 }
 
 .Page__normalText {
+  color: $dark_text;
   text-align: left;
   font-family: LuloCleanOne, sans-serif;
   font-size: 12px;
 }
 
-.Page__normalText--white {
-  color: #ffffff;
+.Page__normalText--light {
+  color: $light_text;
 }
 
 .Page__videoWrapper {
@@ -55,19 +57,19 @@
 
 .Page__nextButton {
   position: fixed;
-  box-sizing: border-box;
-  width: 90%;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 20px;
+  display: block;
+  width: calc(100% - (2 * #{$page_padding}));
+  max-width: $max_component_width;
+  margin: auto;
+  bottom: $page_padding;
 }
 
 .Page__buttonOverStatusBar {
   position: fixed;
-  box-sizing: border-box;
-  width: 90%;
-  left: 50%;
-  transform: translateX(-50%);
+  display: block;
+  width: calc(100% - (2 * #{$page_padding}));
+  max-width: $max_component_width;
+  margin: auto;
   bottom: 80px;
 }
 
@@ -145,7 +147,7 @@
   -moz-border-radius: 10px;
   border-radius: 10px;
   font-family: LuloCleanOne, sans-serif;
-  color: #ffffff;
+  color: $light_text;
   font-size: 25px;
   background: #676867;
   padding: 5px 15px;
