@@ -21,18 +21,19 @@ class TextareaWithButton extends Component
   render() {
     return (
       <div className="TextareaWithButton">
-        <textarea className="TextareaWithButton__textarea AppTheme__element--blueBorder"
-                  value={this.state.textareaValue}
-                  onFocus={() => this.onTextareaFocus()}
-                  onBlur={() => this.onTextareaBlur()}
-                  onChange={(event) => this.onTextareaChange(event)}
-                  onKeyPress={(event) => this.onTextareaKeyPress(event)}
-                  maxLength={DREAM_TEXT_MAX_LENGTH}
+        <textarea
+          className="TextareaWithButton__textarea AppTheme__element--blueBorder"
+          value={this.state.textareaValue}
+          onFocus={() => this.onTextareaFocus()}
+          onBlur={() => this.onTextareaBlur()}
+          onChange={(event) => this.onTextareaChange(event)}
+          onKeyPress={(event) => this.onTextareaKeyPress(event)}
+          maxLength={DREAM_TEXT_MAX_LENGTH}
         />
-        <input type="button" className="TextareaWithButton__button AppTheme__button--smallOrange"
-               value="OK"
-               style={{visibility:(this.state.buttonVisible?'visible':'hidden')}}
-        />
+        <button
+          className="TextareaWithButton__button AppTheme__button--smallOrange"
+          style={{visibility:(this.state.buttonVisible?'visible':'hidden')}}
+        >OK</button>
       </div>
     )
   }
