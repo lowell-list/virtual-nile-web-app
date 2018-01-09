@@ -19,20 +19,20 @@ class InputWithButton extends Component
 
   render() {
     return (
-      <div className="InputWithButton">
+      <div className="InputWithButton AppTheme__element--blueBorder">
         <input
           type="text"
-          className="InputWithButton__input AppTheme__element--blueBorder"
+          className="InputWithButton__input"
           size="10"
+          placeholder="TAP TO TYPE"
           value={this.state.inputValue}
           onFocus={() => this.onInputFocus()}
           onBlur={() => this.onInputBlur()}
           onChange={(event) => this.onInputChange(event)}
         />
-        <button
-          className="InputWithButton__button AppTheme__button--smallOrange"
-          style={{visibility:(this.state.buttonVisible?'visible':'hidden')}}
-        >OK</button>
+        {this.state.buttonVisible &&
+        <button className="InputWithButton__button AppTheme__button--smallOrange">OK</button>
+        }
       </div>
     )
   }

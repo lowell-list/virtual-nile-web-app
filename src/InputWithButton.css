@@ -1,25 +1,21 @@
 .InputWithButton {
-  display: block;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 10px;
 }
 
 .InputWithButton__input {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  padding: 20px 10px;
-
-  background-color: #FFFFFF;
+  flex: 1;
+  padding: 10px 5px 10px 0;
   font-family: LuloCleanOne, sans-serif;
   font-size: 16px;
   color: #000000;
+  border: 0;
+  outline: none;
 }
 
 .InputWithButton__button {
-  position: relative;
   display: block;
-  /* this is a hack; would prefer a solution that vertical-centers the button on the input */
-  top: -54px;
-  right: 14px;
-  margin-left: auto;
   padding: 8px;
 }
