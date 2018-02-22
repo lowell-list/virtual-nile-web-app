@@ -66,7 +66,92 @@ class PageWithStatusBar extends Component {
   }
 }
 
+class TintedImage extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      imageLoaded: false,
+      aspectRatio: 1,
+    };
+
+    // create image object
+    this.image = new Image();
+    this.image.onload = this.onImageLoaded.bind(this);
+    this.image.src = props.source;
+
+    // create off-screen buffer
+
+  }
+
+  onImageLoaded() {
+    console.log(`image loaded with dimensions ${this.image.width}x${this.image.height}`);
+    let aspectRatio = this.image.width / this.image.height;
+    console.log('aspectRatio is ' + aspectRatio);
+    this.setState({imageLoaded: true, aspectRatio: aspectRatio});
+  }
+
+  componentDidUpdate() {
+    this.updateCanvas();
+  }
+
+  updateCanvas() {
+    if(!this.state.imageLoaded || this.canvasElement==null) { return; }
+    console.log('OK to draw');
+
+    const ctx = this.canvasElement.getContext('2d');
+    let cvswth = ctx.canvas.width;
+    let cvshgt = ctx.canvas.height;
+
+    console.log('canvas dimensions are ' + cvswth + "x" + cvshgt);
+    ctx.clearRect(0, 0, cvswth, cvshgt);
+    ctx.fillStyle = "skyblue";
+    ctx.fillRect(0, 0, cvswth, cvshgt);
+    // ctx.fillStyle = "steelblue";
+    // ctx.fillRect(10, 10, 50, 50);
+    // ctx.fillStyle = "#FF0000";
+    // ctx.fillRect(110, 110, 50, 50);
+
+    // this.image = new Image();
+    // let img = this.image;
+    // this.image.onload = function() {
+    //   /**/console.log('image was loaded');
+    //   console.log(img);
+    //   console.log(img.width);
+    //   ctx.drawImage(img,0,0,cvswth,cvshgt);
+    //   /**/console.log('done drawing image');
+    // };
+    // console.log("image source: " + this.props.source);
+    // this.image.src = this.props.source;
+
+    /**/console.log('done drawing on canvas');
+  }
+
+  render() {
+    return (
+      <canvas
+        ref={(element) => { this.canvasElement = element; }}
+        width={this.props.width} height={this.props.width/this.state.aspectRatio}
+      />
+    );
+  }
+}
+
 export class PageCustomizeLotusFlower extends PageWithStatusBar {
+
+  constructor(props) {
+    super(props);
+    this.state.oneHundredPercentWidth = -1; // initial value, to be replaced
+    this.oneHundredPercentDivMounted = this.oneHundredPercentDivMounted.bind(this);
+  }
+
+  oneHundredPercentDivMounted(parent) {
+    if(parent!=null) {
+      this.setState({oneHundredPercentWidth: parent.offsetWidth});
+    }
+  }
+
   render() {
     return (
       <div className="Page">
@@ -74,6 +159,11 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
         <br/>
         <br/>
         <p className="Page__header1 Page__header1--blue">Create your very own Lotus Flower</p>
+
+        <div style={{width: '100%'}} ref={this.oneHundredPercentDivMounted}/>
+
+        <TintedImage width={this.state.oneHundredPercentWidth} source={nc_00_water_glow}/>
+
         <div>
           <img src={nc_50_glow} className="LotusFlower__baseElement" alt="glow"/>
           <img src={nc_00_water_glow} className="LotusFlower__layeredElement" alt="water_glow"/>
