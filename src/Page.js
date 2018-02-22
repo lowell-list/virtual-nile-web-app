@@ -5,6 +5,20 @@ import './Page.css';
 import babas_logo from './img/babas_logo.png';
 import babas_logo_small from './img/babas_logo_small.png';
 import icon_checkmark from './img/icon_checkmark.png';
+import nc_00_water_glow from './img/night_candle/nc_00_water_glow.png';
+import nc_10_shadow_lit from './img/night_candle/nc_10_shadow_lit.png';
+import nc_11_shadow_unlit from './img/night_candle/nc_11_shadow_unlit.png';
+import nc_20_outer_flower_unlit from './img/night_candle/nc_20_outer_flower_unlit.png';
+import nc_21_outer_flower_lit from './img/night_candle/nc_21_outer_flower_lit.png';
+import nc_30_inner_flower_unlit from './img/night_candle/nc_30_inner_flower_unlit.png';
+import nc_31_inner_flower_lit from './img/night_candle/nc_31_inner_flower_lit.png';
+import nc_40_candle_unlit from './img/night_candle/nc_40_candle_unlit.png';
+import nc_41_candle_lit from './img/night_candle/nc_41_candle_lit.png';
+import nc_45_candle_flame from './img/night_candle/nc_45_candle_flame.png';
+import nc_46_candle_glow from './img/night_candle/nc_46_candle_glow.png';
+import nc_50_glow from './img/night_candle/nc_50_glow.png';
+import nc_60_outer_flower_front_unlit from './img/night_candle/nc_60_outer_flower_front_unlit.png';
+import nc_61_outer_flower_front_lit from './img/night_candle/nc_61_outer_flower_front_lit.png';
 
 export class PageLanding extends Component {
 
@@ -49,6 +63,46 @@ class PageWithStatusBar extends Component {
     this.statusBarVisibilityTimeout = setTimeout(() => {
       this.setState({isPageStatusBarVisible: value});
     },delayMillis);
+  }
+}
+
+export class PageCustomizeLotusFlower extends PageWithStatusBar {
+  render() {
+    return (
+      <div className="Page">
+        <br/>
+        <br/>
+        <br/>
+        <p className="Page__header1 Page__header1--blue">Create your very own Lotus Flower</p>
+        <div>
+          <img src={nc_50_glow} className="LotusFlower__baseElement" alt="glow"/>
+          <img src={nc_00_water_glow} className="LotusFlower__layeredElement" alt="water_glow"/>
+          <img src={nc_10_shadow_lit} className="LotusFlower__layeredElement" alt="shadow_lit"/>
+          <img src={nc_11_shadow_unlit} className="LotusFlower__layeredElement" alt="shadow_unlit"/>
+          <img src={nc_20_outer_flower_unlit} className="LotusFlower__layeredElement" alt="outer_flower_unlit"/>
+          <img src={nc_21_outer_flower_lit} className="LotusFlower__layeredElement" alt="outer_flower_lit"/>
+          <img src={nc_30_inner_flower_unlit} className="LotusFlower__layeredElement" alt="inner_flower_unlit"/>
+          <img src={nc_31_inner_flower_lit} className="LotusFlower__layeredElement" alt="inner_flower_lit"/>
+          <img src={nc_40_candle_unlit} className="LotusFlower__layeredElement" alt="candle_unlit"/>
+          <img src={nc_41_candle_lit} className="LotusFlower__layeredElement" alt="candle_lit"/>
+          <img src={nc_45_candle_flame} className="LotusFlower__layeredElement" alt="candle_flame"/>
+          <img src={nc_46_candle_glow} className="LotusFlower__layeredElement" alt="candle_glow"/>
+          <img src={nc_60_outer_flower_front_unlit} className="LotusFlower__layeredElement" alt="outer_flower_front_unlit"/>
+          <img src={nc_61_outer_flower_front_lit} className="LotusFlower__layeredElement" alt="outer_flower_front_lit"/>
+        </div>
+
+        <button className="Page__colorSelectButton" onClick={() => console.log('click') }>Color 1</button>
+        <button className="Page__colorSelectButton" onClick={() => console.log('click') }>Color 2</button>
+        <button className="Page__colorSelectButton" onClick={() => console.log('click') }>Randomizer</button>
+
+        <PageStatusBar
+          visible={this.state.isPageStatusBarVisible}
+          nextEnabled={this.props.nextEnabled}
+          onPreviousClick={this.props.onPreviousClick}
+          onNextClick={this.props.onNextClick}
+        />
+      </div>
+    );
   }
 }
 

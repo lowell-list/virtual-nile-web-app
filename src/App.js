@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import {PageDreamConfirmed, PageLanding, PageSimpleQuestionLongAnswer, PageSimpleQuestionShortAnswer} from "./Page";
+import {
+  PageCustomizeLotusFlower, PageDreamConfirmed, PageLanding, PageSimpleQuestionLongAnswer,
+  PageSimpleQuestionShortAnswer
+} from "./Page";
 import Modal from 'simple-react-modal';
 import Axios from 'axios';
 import './App.css';
@@ -13,6 +16,7 @@ const R = require('ramda');
 
 // page IDs
 const PID_1_1_LANDING           = '1.1-landing';
+const PID_2_1_CUSTOMIZE_LOTUS   = '2.1-customize-lotus';
 const PID_3_1_ENTER_NAME        = '3.1-enter-name';
 const PID_4_1_ENTER_EMAIL       = '4.1-enter-email';
 const PID_5_1_ENTER_DREAM       = '5.1-enter-dream';
@@ -117,14 +121,20 @@ class App extends Component {
       case PID_1_1_LANDING:
         return <PageLanding
           // TODO??: prevent the user from submitting another dream too soon
-          onStartClick={() => this.changePage(PID_3_1_ENTER_NAME)}
+          onStartClick={() => this.changePage(PID_2_1_CUSTOMIZE_LOTUS)}
+        />;
+      case PID_2_1_CUSTOMIZE_LOTUS:
+        return <PageCustomizeLotusFlower
+          nextEnabled={true}
+          onPreviousClick={() => this.changePage(PID_1_1_LANDING)}
+          onNextClick={() => this.changePage(PID_3_1_ENTER_NAME)}
         />;
       case PID_3_1_ENTER_NAME:
         return <PageSimpleQuestionShortAnswer
           questionText={"What's your name?"}
           inputValue={this.state.screenName}
           nextEnabled={App.isScreenNameValid(this.state.screenName)}
-          onPreviousClick={() => this.changePage(PID_1_1_LANDING)}
+          onPreviousClick={() => this.changePage(PID_2_1_CUSTOMIZE_LOTUS)}
           onNextClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
           onUserInput={(value) => {
             this.setState({screenName:value});
