@@ -80,15 +80,13 @@ class TintedImage extends React.Component {
     this.image = new Image();
     this.image.onload = this.onImageLoaded.bind(this);
     this.image.src = props.source;
-
-    // create off-screen buffer
-
   }
 
   onImageLoaded() {
     console.log(`image loaded with dimensions ${this.image.width}x${this.image.height}`);
     let aspectRatio = this.image.width / this.image.height;
     console.log('aspectRatio is ' + aspectRatio);
+
     this.setState({imageLoaded: true, aspectRatio: aspectRatio});
   }
 
@@ -98,32 +96,28 @@ class TintedImage extends React.Component {
 
   updateCanvas() {
     if(!this.state.imageLoaded || this.canvasElement==null) { return; }
-    console.log('OK to draw');
+    console.log('updateCanvas: OK to draw');
 
-    const ctx = this.canvasElement.getContext('2d');
-    let cvswth = ctx.canvas.width;
-    let cvshgt = ctx.canvas.height;
-
+    // get canvas context and dimensions
+    const cvsctx = this.canvasElement.getContext('2d');
+    let cvswth = cvsctx.canvas.width;
+    let cvshgt = cvsctx.canvas.height;
     console.log('canvas dimensions are ' + cvswth + "x" + cvshgt);
-    ctx.clearRect(0, 0, cvswth, cvshgt);
-    ctx.fillStyle = "skyblue";
-    ctx.fillRect(0, 0, cvswth, cvshgt);
-    // ctx.fillStyle = "steelblue";
-    // ctx.fillRect(10, 10, 50, 50);
-    // ctx.fillStyle = "#FF0000";
-    // ctx.fillRect(110, 110, 50, 50);
 
-    // this.image = new Image();
-    // let img = this.image;
-    // this.image.onload = function() {
-    //   /**/console.log('image was loaded');
-    //   console.log(img);
-    //   console.log(img.width);
-    //   ctx.drawImage(img,0,0,cvswth,cvshgt);
-    //   /**/console.log('done drawing image');
-    // };
-    // console.log("image source: " + this.props.source);
-    // this.image.src = this.props.source;
+    // create off-screen buffer canvas and draw on it
+    let bfr = document.createElement('canvas');
+    bfr.width = cvswth;                                 // off-screen buffer dimensions match working canvas
+    bfr.height = cvshgt;
+    let bfrctx = bfr.getContext('2d');
+    bfrctx.fillStyle = '#FFCC0E';                       // fill off-screen buffer with tint color
+    bfrctx.fillRect(0,0,bfr.width,bfr.height);
+    bfrctx.globalCompositeOperation = "destination-atop";
+    bfrctx.drawImage(this.image,0,0,bfr.width,bfr.height);
+
+    // draw on the real canvas
+    cvsctx.drawImage(this.image,0,0,cvswth,cvshgt);
+    cvsctx.globalAlpha = 0.5;
+    cvsctx.drawImage(bfr,0,0);
 
     /**/console.log('done drawing on canvas');
   }
@@ -162,7 +156,7 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
 
         <div style={{width: '100%'}} ref={this.oneHundredPercentDivMounted}/>
 
-        <TintedImage width={this.state.oneHundredPercentWidth} source={nc_00_water_glow}/>
+        <TintedImage width={this.state.oneHundredPercentWidth} source={nc_41_candle_lit} className="LotusFlower__layeredElement"/>
 
         <div>
           <img src={nc_50_glow} className="LotusFlower__baseElement" alt="glow"/>
