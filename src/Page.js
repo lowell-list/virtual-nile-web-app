@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import InputWithButton from './InputWithButton.js';
 import TextareaWithButton from './TextareaWithButton.js';
+import {randomElement} from './Util';
 import './Page.css';
 import babas_logo from './img/babas_logo.png';
 import babas_logo_small from './img/babas_logo_small.png';
@@ -161,9 +162,20 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
   constructor(props) {
     super(props);
 
+    this.primaryColors = [
+      '#ff00ff',
+      '#ffff00',
+      '#ff0000',
+    ];
+    this.secondaryColors = [
+      '#ff00ff',
+      '#ffff00',
+      '#00ff00',
+    ];
+
     this.state = {
-      primaryTint: '#FF0000',
-      secondaryTint: '#00FF00',
+      primaryTint: randomElement(this.primaryColors),
+      secondaryTint: randomElement(this.secondaryColors),
     };
   }
 

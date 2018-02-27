@@ -1,3 +1,7 @@
+/**************************************************************************
+ * STRINGS
+ **************************************************************************/
+
 /**
  * @return a random string of alpha numeric characters
  *
@@ -28,11 +32,27 @@ export function randomAlphaNumericString(length = 10, mixedCase = true)
   return rndstr;
 }
 
+/**************************************************************************
+ * NUMBERS
+ **************************************************************************/
+
 /**
  * Generates a random integer between min (inclusive) and max (inclusive).
  */
-function randomInt(min, max) {
+export function randomInt(min, max) {
   if(max<min) { return min; }
   if(min>max) { return max; }
   return Math.floor(min + (Math.random() * (max - min + 1)));
+}
+
+/**************************************************************************
+ * ARRAYS
+ **************************************************************************/
+
+/**
+ * Returns a random element from this array
+ */
+export function randomElement(array) {
+  if(!array || array.length===0) { return null; }
+  return array[Math.floor(Math.random()*array.length)];
 }
