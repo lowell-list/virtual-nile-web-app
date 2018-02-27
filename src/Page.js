@@ -15,6 +15,7 @@ import nc_45_candle_flame from './img/night_candle/nc_45_candle_flame.png';
 import nc_46_candle_glow from './img/night_candle/nc_46_candle_glow.png';
 import nc_50_glow from './img/night_candle/nc_50_glow.png';
 import nc_61_outer_flower_front_lit from './img/night_candle/nc_61_outer_flower_front_lit.png';
+const R = require('ramda');
 
 export class PageLanding extends Component {
 
@@ -69,38 +70,69 @@ class TintedLayeredImages extends React.Component {
     this.state = {
       allImagesLoaded: false,
     };
+    this.loadImagesFromProps(props);
+  }
 
-    // load all Image objects
-    this.imageProperties = [];                                // array of image property objects, one for each image
+  /**
+   * Load all images defined in props.images; put the result in this.imageProperties
+   */
+  loadImagesFromProps(props) {
+
+    // cleanup if images already loaded: prevent unwanted onload() calls from disposed elements
+    if(R.is(Array,this.imageProperties)) {
+      for(let imgprp of this.imageProperties) {
+        if(R.is(Image,imgprp.image)) { imgprp.image.onload = null; }
+      }
+    }
+
+    // array of image property objects, one for each image
+    this.imageProperties = [];
     this.loadedImagesCount = 0;
-    for(let orgimgprp of props.images) {                      // orgimgprp = original image properties
+
+    for(let orgimgprp of props.images) {                          // orgimgprp = original image properties
       let imgobj = new Image();
       let imgprp = Object.assign({image: imgobj},orgimgprp);
       this.imageProperties.push(imgprp);
       imgobj.onload = this.onImageLoaded.bind(this);
-      imgobj.src = orgimgprp.src;
+      imgobj.src = orgimgprp.src;                                 // assigning src starts image loading
     }
   }
 
   onImageLoaded() {
     this.loadedImagesCount++;
-    if(this.props.images.length === this.loadedImagesCount) { this.onAllImagesLoaded(); }
+    if(this.imageProperties.length === this.loadedImagesCount) {
+      this.setState({allImagesLoaded: true}); // setting state triggers re-render
+    }
   }
 
-  onAllImagesLoaded() {
-    this.setState({allImagesLoaded: true});
+  componentWillReceiveProps(nextProps) {
+    this.setState({allImagesLoaded: false});
+    this.loadImagesFromProps(nextProps);
+  }
+
+  render() {
+    return (
+      <canvas
+        style={this.props.canvasStyle}
+        ref={(element) => { this.canvasElement = element; }}
+        width={this.props.canvasWidth} height={this.props.canvasHeight}
+      />
+    );
   }
 
   componentDidUpdate() {
-    this.updateCanvas();
+    this.drawCanvas();
   }
 
-  updateCanvas() {
+  drawCanvas() {
     // do not continue if not ready yet
     if(!this.state.allImagesLoaded || this.canvasElement==null) { return; }
 
-    // draw all images onto canvas
+    // get canvas context and clear the canvas
     const cvsctx = this.canvasElement.getContext('2d'); // canvas drawing context
+    cvsctx.clearRect(0,0,cvsctx.canvas.width,cvsctx.canvas.height);
+
+    // draw all images onto canvas
     for(let imgprp of this.imageProperties) {
       this.drawImageOnCanvas(cvsctx, imgprp);
     }
@@ -146,15 +178,6 @@ class TintedLayeredImages extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <canvas
-        style={this.props.canvasStyle}
-        ref={(element) => { this.canvasElement = element; }}
-        width={this.props.canvasWidth} height={this.props.canvasHeight}
-      />
-    );
-  }
 }
 
 export class PageCustomizeLotusFlower extends PageWithStatusBar {
@@ -173,18 +196,15 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
       '#00ff00',
     ];
 
-    this.state = {
+    this.state = Object.assign(this.state, {
       primaryTint: randomElement(this.primaryColors),
       secondaryTint: randomElement(this.secondaryColors),
-    };
+    });
   }
 
-    render() {
+  render() {
     return (
       <div className="Page">
-        <br/>
-        <br/>
-        <br/>
         <p className="Page__header1 Page__header1--blue">Create your very own Lotus Flower</p>
 
         <TintedLayeredImages
@@ -205,9 +225,9 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
           }
         />
 
-        <button className="Page__colorSelectButton" onClick={() => console.log('click') }>Color 1</button>
-        <button className="Page__colorSelectButton" onClick={() => console.log('click') }>Color 2</button>
-        <button className="Page__colorSelectButton" onClick={() => console.log('click') }>Randomizer</button>
+        <button className="Page__colorSelectButton" onClick={() => this.onPrimaryColorButtonClick()}>Color 1</button>
+        <button className="Page__colorSelectButton" onClick={() => this.onSecondaryColorButtonClick()}>Color 2</button>
+        <button className="Page__colorSelectButton" onClick={() => this.onRandomizerButtonClick()}>Randomizer</button>
 
         <PageStatusBar
           visible={this.state.isPageStatusBarVisible}
@@ -218,6 +238,19 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
       </div>
     );
   }
+
+  onPrimaryColorButtonClick() {
+    this.setState({primaryTint: randomElement(this.primaryColors)});
+  }
+
+  onSecondaryColorButtonClick() {
+    this.setState({secondaryTint: randomElement(this.secondaryColors)});
+  }
+
+  onRandomizerButtonClick() {
+    console.log('randomizer click');
+  }
+
 }
 
 export class PageSimpleQuestionShortAnswer extends PageWithStatusBar {
