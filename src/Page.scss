@@ -173,16 +173,3 @@
   -moz-box-shadow: inset 0px 0px 4px #ccc;
   box-shadow: inset 0px 0px 4px #ccc;
 }
-
-.LotusFlower__baseElement {
-  width: 100%;
-  max-width: 750px;
-}
-
-.LotusFlower__layeredElement {
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 750px;
-  position: absolute;
-}

@@ -7,17 +7,12 @@ import babas_logo_small from './img/babas_logo_small.png';
 import icon_checkmark from './img/icon_checkmark.png';
 import nc_00_water_glow from './img/night_candle/nc_00_water_glow.png';
 import nc_10_shadow_lit from './img/night_candle/nc_10_shadow_lit.png';
-import nc_11_shadow_unlit from './img/night_candle/nc_11_shadow_unlit.png';
-import nc_20_outer_flower_unlit from './img/night_candle/nc_20_outer_flower_unlit.png';
 import nc_21_outer_flower_lit from './img/night_candle/nc_21_outer_flower_lit.png';
-import nc_30_inner_flower_unlit from './img/night_candle/nc_30_inner_flower_unlit.png';
 import nc_31_inner_flower_lit from './img/night_candle/nc_31_inner_flower_lit.png';
-import nc_40_candle_unlit from './img/night_candle/nc_40_candle_unlit.png';
 import nc_41_candle_lit from './img/night_candle/nc_41_candle_lit.png';
 import nc_45_candle_flame from './img/night_candle/nc_45_candle_flame.png';
 import nc_46_candle_glow from './img/night_candle/nc_46_candle_glow.png';
 import nc_50_glow from './img/night_candle/nc_50_glow.png';
-import nc_60_outer_flower_front_unlit from './img/night_candle/nc_60_outer_flower_front_unlit.png';
 import nc_61_outer_flower_front_lit from './img/night_candle/nc_61_outer_flower_front_lit.png';
 
 export class PageLanding extends Component {
@@ -66,28 +61,33 @@ class PageWithStatusBar extends Component {
   }
 }
 
-class TintedImage extends React.Component {
+class TintedLayeredImages extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      imageLoaded: false,
-      aspectRatio: 1,
+      allImagesLoaded: false,
     };
 
-    // create image object
-    this.image = new Image();
-    this.image.onload = this.onImageLoaded.bind(this);
-    this.image.src = props.source;
+    // load all Image objects
+    this.imageProperties = [];                                // array of image property objects, one for each image
+    this.loadedImagesCount = 0;
+    for(let orgimgprp of props.images) {                      // orgimgprp = original image properties
+      let imgobj = new Image();
+      let imgprp = Object.assign({image: imgobj},orgimgprp);
+      this.imageProperties.push(imgprp);
+      imgobj.onload = this.onImageLoaded.bind(this);
+      imgobj.src = orgimgprp.src;
+    }
   }
 
   onImageLoaded() {
-    console.log(`image loaded with dimensions ${this.image.width}x${this.image.height}`);
-    let aspectRatio = this.image.width / this.image.height;
-    console.log('aspectRatio is ' + aspectRatio);
+    this.loadedImagesCount++;
+    if(this.props.images.length === this.loadedImagesCount) { this.onAllImagesLoaded(); }
+  }
 
-    this.setState({imageLoaded: true, aspectRatio: aspectRatio});
+  onAllImagesLoaded() {
+    this.setState({allImagesLoaded: true});
   }
 
   componentDidUpdate() {
@@ -95,38 +95,62 @@ class TintedImage extends React.Component {
   }
 
   updateCanvas() {
-    if(!this.state.imageLoaded || this.canvasElement==null) { return; }
-    console.log('updateCanvas: OK to draw');
+    // do not continue if not ready yet
+    if(!this.state.allImagesLoaded || this.canvasElement==null) { return; }
 
-    // get canvas context and dimensions
-    const cvsctx = this.canvasElement.getContext('2d');
-    let cvswth = cvsctx.canvas.width;
-    let cvshgt = cvsctx.canvas.height;
-    console.log('canvas dimensions are ' + cvswth + "x" + cvshgt);
+    // draw all images onto canvas
+    const cvsctx = this.canvasElement.getContext('2d'); // canvas drawing context
+    for(let imgprp of this.imageProperties) {
+      this.drawImageOnCanvas(cvsctx, imgprp);
+    }
+  }
 
-    // create off-screen buffer canvas and draw on it
-    let bfr = document.createElement('canvas');
-    bfr.width = cvswth;                                 // off-screen buffer dimensions match working canvas
-    bfr.height = cvshgt;
-    let bfrctx = bfr.getContext('2d');
-    bfrctx.fillStyle = '#FFCC0E';                       // fill off-screen buffer with tint color
-    bfrctx.fillRect(0,0,bfr.width,bfr.height);
-    bfrctx.globalCompositeOperation = "destination-atop";
-    bfrctx.drawImage(this.image,0,0,bfr.width,bfr.height);
+  drawImageOnCanvas(context, imageProps)
+  {
+    let ovlbfr = null;    // overlay buffer
+    let ovlalp = 0.5;     // overlay alpha
 
-    // draw on the real canvas
-    cvsctx.drawImage(this.image,0,0,cvswth,cvshgt);
-    cvsctx.globalAlpha = 0.5;
-    cvsctx.drawImage(bfr,0,0);
+    // get canvas dimensions
+    let cvswth = context.canvas.width;
+    let cvshgt = context.canvas.height;
 
-    /**/console.log('done drawing on canvas');
+    // generate overlay buffer if necessary
+    if(imageProps.hasOwnProperty('tint'))
+    {
+      // tint magic here!
+
+      // 1) create an off-screen buffer canvas that is the same size as the real canvas
+      ovlbfr = document.createElement('canvas');
+      ovlbfr.width = cvswth;
+      ovlbfr.height = cvshgt;
+      let bfrctx = ovlbfr.getContext('2d');
+      // 2) using the reference image, draw the tint-color in every non-transparent pixel position
+      //    Do this using the 'destination-atop' composite operation:
+      //      The existing canvas is only kept where it overlaps the new shape.
+      //      The new shape is drawn behind the canvas content.
+      bfrctx.fillStyle = imageProps.tint;
+      bfrctx.fillRect(0,0,ovlbfr.width,ovlbfr.height);                      // fill off-screen buffer with tint color
+      bfrctx.globalCompositeOperation = "destination-atop";                 // set composite operation
+      bfrctx.drawImage(imageProps.image,0,0,ovlbfr.width,ovlbfr.height);    // draw image w/ defined composite operation
+    }
+
+    // draw the image on the canvas context
+    context.globalAlpha = 1.0;
+    context.drawImage(imageProps.image,0,0,cvswth,cvshgt);
+
+    // optionally superimpose the overlay buffer with the given alpha, which in effect "tints" the original image
+    if(ovlbfr != null) {
+      context.globalAlpha = ovlalp;
+      context.drawImage(ovlbfr,0,0);
+    }
   }
 
   render() {
     return (
       <canvas
+        style={this.props.canvasStyle}
         ref={(element) => { this.canvasElement = element; }}
-        width={this.props.width} height={this.props.width/this.state.aspectRatio}
+        width={this.props.canvasWidth} height={this.props.canvasHeight}
       />
     );
   }
@@ -136,17 +160,14 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
 
   constructor(props) {
     super(props);
-    this.state.oneHundredPercentWidth = -1; // initial value, to be replaced
-    this.oneHundredPercentDivMounted = this.oneHundredPercentDivMounted.bind(this);
+
+    this.state = {
+      primaryTint: '#FF0000',
+      secondaryTint: '#00FF00',
+    };
   }
 
-  oneHundredPercentDivMounted(parent) {
-    if(parent!=null) {
-      this.setState({oneHundredPercentWidth: parent.offsetWidth});
-    }
-  }
-
-  render() {
+    render() {
     return (
       <div className="Page">
         <br/>
@@ -154,26 +175,23 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
         <br/>
         <p className="Page__header1 Page__header1--blue">Create your very own Lotus Flower</p>
 
-        <div style={{width: '100%'}} ref={this.oneHundredPercentDivMounted}/>
-
-        <TintedImage width={this.state.oneHundredPercentWidth} source={nc_41_candle_lit} className="LotusFlower__layeredElement"/>
-
-        <div>
-          <img src={nc_50_glow} className="LotusFlower__baseElement" alt="glow"/>
-          <img src={nc_00_water_glow} className="LotusFlower__layeredElement" alt="water_glow"/>
-          <img src={nc_10_shadow_lit} className="LotusFlower__layeredElement" alt="shadow_lit"/>
-          <img src={nc_11_shadow_unlit} className="LotusFlower__layeredElement" alt="shadow_unlit"/>
-          <img src={nc_20_outer_flower_unlit} className="LotusFlower__layeredElement" alt="outer_flower_unlit"/>
-          <img src={nc_21_outer_flower_lit} className="LotusFlower__layeredElement" alt="outer_flower_lit"/>
-          <img src={nc_30_inner_flower_unlit} className="LotusFlower__layeredElement" alt="inner_flower_unlit"/>
-          <img src={nc_31_inner_flower_lit} className="LotusFlower__layeredElement" alt="inner_flower_lit"/>
-          <img src={nc_40_candle_unlit} className="LotusFlower__layeredElement" alt="candle_unlit"/>
-          <img src={nc_41_candle_lit} className="LotusFlower__layeredElement" alt="candle_lit"/>
-          <img src={nc_45_candle_flame} className="LotusFlower__layeredElement" alt="candle_flame"/>
-          <img src={nc_46_candle_glow} className="LotusFlower__layeredElement" alt="candle_glow"/>
-          <img src={nc_60_outer_flower_front_unlit} className="LotusFlower__layeredElement" alt="outer_flower_front_unlit"/>
-          <img src={nc_61_outer_flower_front_lit} className="LotusFlower__layeredElement" alt="outer_flower_front_lit"/>
-        </div>
+        <TintedLayeredImages
+          canvasStyle={{width: '100%'}}
+          canvasWidth={750} canvasHeight={450}
+          images={
+            [
+              {src: nc_50_glow},
+              {src: nc_00_water_glow},
+              {src: nc_10_shadow_lit},
+              {src: nc_21_outer_flower_lit, tint: this.state.secondaryTint},
+              {src: nc_31_inner_flower_lit, tint: this.state.primaryTint},
+              {src: nc_41_candle_lit},
+              {src: nc_45_candle_flame},
+              {src: nc_46_candle_glow},
+              {src: nc_61_outer_flower_front_lit},
+            ]
+          }
+        />
 
         <button className="Page__colorSelectButton" onClick={() => console.log('click') }>Color 1</button>
         <button className="Page__colorSelectButton" onClick={() => console.log('click') }>Color 2</button>
