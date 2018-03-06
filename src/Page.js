@@ -66,26 +66,6 @@ class PageWithStatusBar extends Component {
 
 export class PageCustomizeLotusFlower extends PageWithStatusBar {
 
-  constructor(props) {
-    super(props);
-
-    this.primaryColors = [
-      '#ff00ff',
-      '#ffff00',
-      '#ff0000',
-    ];
-    this.secondaryColors = [
-      '#ff00ff',
-      '#ffff00',
-      '#00ff00',
-    ];
-
-    this.state = Object.assign(this.state, {
-      primaryTint: randomElement(this.primaryColors),
-      secondaryTint: randomElement(this.secondaryColors),
-    });
-  }
-
   render() {
     return (
       <div className="Page">
@@ -99,8 +79,8 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
               {src: nc_50_glow},
               {src: nc_00_water_glow},
               {src: nc_10_shadow_lit},
-              {src: nc_21_outer_flower_lit, tint: this.state.secondaryTint},
-              {src: nc_31_inner_flower_lit, tint: this.state.primaryTint},
+              {src: nc_21_outer_flower_lit, tint: this.props.colors.secondary},
+              {src: nc_31_inner_flower_lit, tint: this.props.colors.primary},
               {src: nc_41_candle_lit},
               {src: nc_45_candle_flame},
               {src: nc_46_candle_glow},
@@ -124,17 +104,17 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
   }
 
   onPrimaryColorButtonClick() {
-    this.setState({primaryTint: randomElement(this.primaryColors)});
+    this.props.onChangeColors(Object.assign({},this.props.colors,{primary:randomElement(this.props.primaryColors)}));
   }
 
   onSecondaryColorButtonClick() {
-    this.setState({secondaryTint: randomElement(this.secondaryColors)});
+    this.props.onChangeColors(Object.assign({},this.props.colors,{secondary:randomElement(this.props.secondaryColors)}));
   }
 
   onRandomizerButtonClick() {
-    this.setState({
-      primaryTint: randomElement(this.primaryColors),
-      secondaryTint: randomElement(this.secondaryColors),
+    this.props.onChangeColors({
+      primary:randomElement(this.props.primaryColors),
+      secondary:randomElement(this.props.secondaryColors),
     });
   }
 

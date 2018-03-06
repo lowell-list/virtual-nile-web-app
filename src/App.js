@@ -30,12 +30,26 @@ const LSK_USER_ID               = 'userId';
 // session storage keys
 const SSK_CURRENT_PAGE_ID       = 'currentPageId';
 const SSK_DREAM_TEXT            = 'dreamText';
+const SSK_LOTUS_COLORS          = 'lotusColors';
 
 // valid location IDs
 const VALID_LOCATION_IDS        = [ 'babas_pdx_bethany', 'babas_pdx_cascade' ];
 
 // dream text max length
 export const DREAM_TEXT_MAX_LENGTH = 280;
+
+// lotus flower customizable colors
+const LOTUS_PRIMARY_COLORS = [
+  '#F3C73F', // default
+  '#ff00ff',
+  '#ff0000',
+];
+const LOTUS_SECONDARY_COLORS = [
+  '#86E9E5', // default
+  '#ff00ff',
+  '#ffff00',
+  '#00ff00',
+];
 
 /**************************************************************************
  * MAIN COMPONENT
@@ -77,6 +91,9 @@ class App extends Component {
     let screenName = App.getCachedValue(LSK_SCREEN_NAME, '', localStorage, 'screen name');
     let email = App.getCachedValue(LSK_EMAIL, '', localStorage, 'email');
     let dreamText = App.getCachedValue(SSK_DREAM_TEXT, '', sessionStorage, 'dream text');
+    let defaultLotusColors = {primary:LOTUS_PRIMARY_COLORS[0], secondary:LOTUS_SECONDARY_COLORS[0]};
+    let lotusColors = App.getCachedValue(SSK_LOTUS_COLORS, defaultLotusColors, sessionStorage, 'lotus colors');
+    try { lotusColors = JSON.parse(lotusColors); } catch(error) { lotusColors = defaultLotusColors; }
 
     // set initial state
     this.state = {
@@ -86,6 +103,7 @@ class App extends Component {
       screenName: screenName,
       email: email,
       dreamText: dreamText,
+      lotusColors: lotusColors,
       modalMessage: constructorModalMessage,
       dreamSubmitInProgress: false,
     };
@@ -126,6 +144,13 @@ class App extends Component {
       case PID_2_1_CUSTOMIZE_LOTUS:
         return <PageCustomizeLotusFlower
           nextEnabled={true}
+          primaryColors={LOTUS_PRIMARY_COLORS}
+          secondaryColors={LOTUS_SECONDARY_COLORS}
+          colors={this.state.lotusColors}
+          onChangeColors={(newColors) => {
+            this.setState({lotusColors: newColors});
+            sessionStorage.setItem(SSK_LOTUS_COLORS,JSON.stringify(newColors));
+          }}
           onPreviousClick={() => this.changePage(PID_1_1_LANDING)}
           onNextClick={() => this.changePage(PID_3_1_ENTER_NAME)}
         />;
