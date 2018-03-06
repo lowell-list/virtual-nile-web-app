@@ -173,3 +173,44 @@
   -moz-box-shadow: inset 0px 0px 4px #ccc;
   box-shadow: inset 0px 0px 4px #ccc;
 }
+
+.Page__fullWidthFlexContainer {
+  width: 100%;
+  display: flex;
+}
+
+.Page__colorSelectButton {
+  flex: 1;
+  margin: 3px;
+  padding: 3px;
+  background: $babas_orange;
+
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+
+  text-decoration: none;
+  border: none;
+  outline: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.Page__colorSelectButton:active {
+  background: darken($babas_orange,15%);
+}
+
+.Page__colorSelectButton__title {
+  font-family: LuloCleanOneBold, sans-serif;
+  color: $light_text;
+  font-size: 8px;
+}
+
+.Page__colorSelectButton__content {
+  font-family: LuloCleanOneBold, sans-serif;
+  color: $light_text;
+  font-size: 26px;
+}

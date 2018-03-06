@@ -6,6 +6,7 @@ import {randomElement} from './Util';
 import './Page.css';
 import babas_logo from './img/babas_logo.png';
 import babas_logo_small from './img/babas_logo_small.png';
+import randomizer_icon from './img/randomizer_icon.png';
 import icon_checkmark from './img/icon_checkmark.png';
 import nc_00_water_glow from './img/night_candle/nc_00_water_glow.png';
 import nc_10_shadow_lit from './img/night_candle/nc_10_shadow_lit.png';
@@ -89,9 +90,26 @@ export class PageCustomizeLotusFlower extends PageWithStatusBar {
           }
         />
 
-        <button className="Page__colorSelectButton" onClick={() => this.onPrimaryColorButtonClick()}>Color 1</button>
-        <button className="Page__colorSelectButton" onClick={() => this.onSecondaryColorButtonClick()}>Color 2</button>
-        <button className="Page__colorSelectButton" onClick={() => this.onRandomizerButtonClick()}>Randomizer</button>
+        <div className="Page__fullWidthFlexContainer">
+          <button className="Page__colorSelectButton" onClick={() => this.onPrimaryColorButtonClick()}>
+            <div className="Page__colorSelectButton__title">Color</div>
+            <div className="Page__colorSelectButton__content">1</div>
+          </button>
+          <button className="Page__colorSelectButton" onClick={() => this.onSecondaryColorButtonClick()}>
+            <div className="Page__colorSelectButton__title">Color</div>
+            <div className="Page__colorSelectButton__content">2</div>
+          </button>
+          <button className="Page__colorSelectButton" onClick={() => this.onRandomizerButtonClick()}>
+            <div className="Page__colorSelectButton__title">Randomizer</div>
+            <div className="Page__colorSelectButton__content">
+              <img src={randomizer_icon} style={{maxHeight: "30px", display: 'flex'}} alt="randomizer icon" />
+            </div>
+          </button>
+        </div>
+
+        <br/>
+        <br/>
+        <br/>
 
         <PageStatusBar
           visible={this.state.isPageStatusBarVisible}

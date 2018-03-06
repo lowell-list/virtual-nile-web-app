@@ -41,14 +41,14 @@ export const DREAM_TEXT_MAX_LENGTH = 280;
 // lotus flower customizable colors
 const LOTUS_PRIMARY_COLORS = [
   '#F3C73F', // default
-  '#ff00ff',
-  '#ff0000',
+  '#FF00FF',
+  '#FF0000',
 ];
 const LOTUS_SECONDARY_COLORS = [
   '#86E9E5', // default
-  '#ff00ff',
-  '#ffff00',
-  '#00ff00',
+  '#FF00FF',
+  '#FFFF00',
+  '#00FF00',
 ];
 
 /**************************************************************************
