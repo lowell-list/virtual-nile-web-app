@@ -62,7 +62,8 @@ export default class TintedLayeredImages extends React.Component {
     this.drawCanvas();
   }
 
-  drawCanvas() {
+  drawCanvas()
+  {
     // do not continue if not ready yet
     if(!this.state.allImagesLoaded || this.canvasElement==null) { return; }
 
@@ -73,6 +74,11 @@ export default class TintedLayeredImages extends React.Component {
     // draw all images onto canvas
     for(let imgprp of this.imageProperties) {
       this.drawImageOnCanvas(cvsctx, imgprp);
+    }
+
+    // optionally pass back canvas image data as data URL (png format by default)
+    if(this.props.onCanvasDrawn!=null) {
+      this.props.onCanvasDrawn(this.canvasElement.toDataURL());
     }
   }
 
