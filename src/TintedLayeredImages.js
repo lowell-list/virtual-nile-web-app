@@ -85,40 +85,35 @@ export default class TintedLayeredImages extends React.Component {
   drawImageOnCanvas(context, imageProps)
   {
     let ovlbfr = null;    // overlay buffer
-    let ovlalp = 0.5;     // overlay alpha
 
     // get canvas dimensions
     let cvswth = context.canvas.width;
     let cvshgt = context.canvas.height;
 
-    // generate overlay buffer if necessary
+    // if tinting, create a solid-color cutout with the same shape as the source image;
+    // this shape will be stored in an off-screen overlay buffer
     if(imageProps.hasOwnProperty('tint'))
     {
-      // tint magic here!
-
       // 1) create an off-screen buffer canvas that is the same size as the real canvas
       ovlbfr = document.createElement('canvas');
       ovlbfr.width = cvswth;
       ovlbfr.height = cvshgt;
       let bfrctx = ovlbfr.getContext('2d');
-      // 2) using the reference image, draw the tint-color in every non-transparent pixel position
-      //    Do this using the 'destination-atop' composite operation:
-      //      The existing canvas is only kept where it overlaps the new shape.
-      //      The new shape is drawn behind the canvas content.
+      // 2) create solid-color cutout shape
       bfrctx.fillStyle = imageProps.tint;
-      bfrctx.fillRect(0,0,ovlbfr.width,ovlbfr.height);                      // fill off-screen buffer with tint color
+      bfrctx.fillRect(0,0,ovlbfr.width,ovlbfr.height);                      // fill buffer with tint color
       bfrctx.globalCompositeOperation = "destination-atop";                 // set composite operation
-      bfrctx.drawImage(imageProps.image,0,0,ovlbfr.width,ovlbfr.height);    // draw image w/ defined composite operation
+      bfrctx.drawImage(imageProps.image,0,0,ovlbfr.width,ovlbfr.height);    // create solid-color shape
     }
 
     // draw the image on the canvas context
-    context.globalAlpha = 1.0;
     context.drawImage(imageProps.image,0,0,cvswth,cvshgt);
 
-    // optionally superimpose the overlay buffer with the given alpha, which in effect "tints" the original image
+    // if tinting, superimpose the overlay buffer using a "multiply" composite operation
     if(ovlbfr != null) {
-      context.globalAlpha = ovlalp;
+      context.globalCompositeOperation = "multiply";
       context.drawImage(ovlbfr,0,0);
+      context.globalCompositeOperation = "source-over"; // restore default settings
     }
   }
 
