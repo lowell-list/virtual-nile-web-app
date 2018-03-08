@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import {
-  PageCustomizeLotusFlower, PageDreamConfirmed, PageLanding, PageSimpleQuestionLongAnswer,
-  PageSimpleQuestionShortAnswer
-} from "./Page";
 import Modal from 'simple-react-modal';
 import Axios from 'axios';
-import './App.css';
-import {randomAlphaNumericString} from './Util';
-import Blacklist from './Blacklist';
+import PageLanding from './component/PageLanding';
+import PageCustomizeLotusFlower from './component/PageCustomizeLotusFlower';
+import PageSimpleQuestionShortAnswer from './component/PageSimpleQuestionShortAnswer';
+import PageSimpleQuestionLongAnswer from './component/PageSimpleQuestionLongAnswer';
+import PageDreamConfirmed from './component/PageDreamConfirmed';
+import {randomAlphaNumericString} from './util/Util';
+import Blacklist from './util/Blacklist';
+import './style/App.css';
 const R = require('ramda');
 
 /**************************************************************************
@@ -34,9 +35,6 @@ const SSK_LOTUS_COLORS          = 'lotusColors';
 
 // valid location IDs
 const VALID_LOCATION_IDS        = [ 'babas_pdx_bethany', 'babas_pdx_cascade' ];
-
-// dream text max length
-export const DREAM_TEXT_MAX_LENGTH = 280;
 
 // lotus flower customizable colors
 const LOTUS_PRIMARY_COLORS = [
@@ -185,6 +183,7 @@ class App extends Component {
       case PID_5_1_ENTER_DREAM:
         return <PageSimpleQuestionLongAnswer
           questionText={`${this.state.screenName}, tell us about your dream`}
+          inputMaxLength={280}
           inputValue={this.state.dreamText}
           nextEnabled={App.isDreamTextValid(this.state.dreamText) && !this.state.dreamSubmitInProgress}
           doneButtonLabel={this.state.dreamSubmitInProgress ? 'Submitting...' : 'Done!'}

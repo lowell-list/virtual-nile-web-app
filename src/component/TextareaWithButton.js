@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import './TextareaWithButton.css';
-import {DREAM_TEXT_MAX_LENGTH} from './App'
+import '../style/TextareaWithButton.css';
 const R = require('ramda');
 
 class TextareaWithButton extends Component
@@ -28,7 +27,7 @@ class TextareaWithButton extends Component
           onBlur={() => this.onTextareaBlur()}
           onChange={(event) => this.onTextareaChange(event)}
           onKeyPress={(event) => this.onTextareaKeyPress(event)}
-          maxLength={DREAM_TEXT_MAX_LENGTH}
+          maxLength={this.props.maxLength}
         />
         <button
           className="TextareaWithButton__button AppTheme__button--smallOrange"

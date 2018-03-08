@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './InputWithButton.css';
+import '../style/InputWithButton.css';
 const R = require('ramda');
 
 class InputWithButton extends Component

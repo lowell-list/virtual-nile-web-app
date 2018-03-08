@@ -1,4 +1,4 @@
-@import "./Shared.scss";
+@import "Shared.scss";
 
 .TextareaWithButton {
   display: block;
@@ -23,7 +23,7 @@
 .TextareaWithButton__button {
   position: relative;
   display: block;
-  /* this is a hack; would prefer a solution that vertical-centers the button on the input */
+  /* NOTE: this is a hack; would prefer a solution that vertical-centers the button on the input */
   top: -54px;
   right: 14px;
   margin-left: auto;
