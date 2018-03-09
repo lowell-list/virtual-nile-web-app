@@ -5,6 +5,7 @@ import PageLanding from './component/PageLanding';
 import PageCustomizeLotusFlower from './component/PageCustomizeLotusFlower';
 import PageSimpleQuestionShortAnswer from './component/PageSimpleQuestionShortAnswer';
 import PageSimpleQuestionLongAnswer from './component/PageSimpleQuestionLongAnswer';
+import PageFlickFlower from './component/PageFlickFlower';
 import PageDreamConfirmed from './component/PageDreamConfirmed';
 import {randomAlphaNumericString} from './util/Util';
 import Blacklist from './util/Blacklist';
@@ -21,6 +22,7 @@ const PID_2_1_CUSTOMIZE_LOTUS   = '2.1-customize-lotus';
 const PID_3_1_ENTER_NAME        = '3.1-enter-name';
 const PID_4_1_ENTER_EMAIL       = '4.1-enter-email';
 const PID_5_1_ENTER_DREAM       = '5.1-enter-dream';
+const PID_6_1_FLICK_FLOWER      = '6.1-flick-flower';
 const PID_6_2_DREAM_CONFIRMED   = '6.2-dream-confirmed';
 
 // local storage keys
@@ -188,7 +190,7 @@ class App extends Component {
           nextEnabled={App.isDreamTextValid(this.state.dreamText) && !this.state.dreamSubmitInProgress}
           doneButtonLabel={this.state.dreamSubmitInProgress ? 'Submitting...' : 'Done!'}
           onPreviousClick={() => this.changePage(PID_4_1_ENTER_EMAIL)}
-          onNextClick={() => this.submitDream()}
+          onNextClick={() => this.changePage(PID_6_1_FLICK_FLOWER)}
           onUserInput={(value) => {
             this.setState({dreamText:value});
             sessionStorage.setItem(SSK_DREAM_TEXT,value);
@@ -201,6 +203,10 @@ class App extends Component {
             }
           }}
         />;
+      case PID_6_1_FLICK_FLOWER:
+        return <PageFlickFlower
+        />;
+        // when done flicking, do this: this.submitDream(PID_6_2_DREAM_CONFIRMED)
       case PID_6_2_DREAM_CONFIRMED:
         return <PageDreamConfirmed
           confirmationText={`${this.state.screenName}, your dream has been added to the Virtual Nile!`}
@@ -248,7 +254,7 @@ class App extends Component {
     },delayMillis);
   }
 
-  submitDream()
+  submitDream(successPageId)
   {
     // set state so that other components can reflect that we're submitting
     this.setState({dreamSubmitInProgress:true});
@@ -270,7 +276,7 @@ class App extends Component {
         // TODO: save dream ID for future lookup
         sessionStorage.setItem(SSK_DREAM_TEXT,''); // clear session-stored dream text
         this.setState({dreamText:''});
-        this.changePage(PID_6_2_DREAM_CONFIRMED);
+        this.changePage(successPageId);
       }
       this.setState({dreamSubmitInProgress:false});
     })
