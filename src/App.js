@@ -205,6 +205,8 @@ class App extends Component {
         />;
       case PID_6_1_FLICK_FLOWER:
         return <PageFlickFlower
+          screenName={this.state.screenName}
+          colors={this.state.lotusColors}
         />;
         // when done flicking, do this: this.submitDream(PID_6_2_DREAM_CONFIRMED)
       case PID_6_2_DREAM_CONFIRMED:

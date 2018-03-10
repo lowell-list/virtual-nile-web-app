@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
-import babas_logo from '.././img/babas_logo.png';
+import NightLotusFlower from './NightLotusFlower';
 
 export default class PageFlickFlower extends Component {
 
   render() {
     return (
       <div className="Page">
-        <img src={babas_logo} className="Page__babasLogo" alt="babas_logo" />
-        <p className="Page__header1 Page__header1--blue">Let's flick that flower!</p>
+        <p className="Page__header1 Page__header1--blue">
+          {this.props.screenName}, "FLICK" your lotus flower into the Virtual Nile
+        </p>
+        <NightLotusFlower colors={this.props.colors} />
       </div>
     );
   }

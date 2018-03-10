@@ -1,19 +1,10 @@
 import React from 'react';
 import PageWithStatusBar from './PageWithStatusBar';
 import PageStatusBar from './PageStatusBar';
-import TintedLayeredImages from './TintedLayeredImages';
+import NightLotusFlower from './NightLotusFlower';
 import InputWithButton from './InputWithButton';
 import {randomElement} from '../util/Util';
 import randomizer_icon from '.././img/randomizer_icon.png';
-import nc_00_water_glow from '.././img/night_candle/nc_00_water_glow.png';
-import nc_10_shadow_lit from '.././img/night_candle/nc_10_shadow_lit.png';
-import nc_21_outer_flower_lit from '.././img/night_candle/nc_21_outer_flower_lit.png';
-import nc_31_inner_flower_lit from '.././img/night_candle/nc_31_inner_flower_lit.png';
-import nc_41_candle_lit from '.././img/night_candle/nc_41_candle_lit.png';
-import nc_45_candle_flame from '.././img/night_candle/nc_45_candle_flame.png';
-import nc_46_candle_glow from '.././img/night_candle/nc_46_candle_glow.png';
-import nc_50_glow from '.././img/night_candle/nc_50_glow.png';
-import nc_61_outer_flower_front_lit from '.././img/night_candle/nc_61_outer_flower_front_lit.png';
 const R = require('ramda');
 
 export default class PageCustomizeLotusFlower extends PageWithStatusBar {
@@ -23,23 +14,7 @@ export default class PageCustomizeLotusFlower extends PageWithStatusBar {
       <div className="Page">
         <p className="Page__header1 Page__header1--blue">Create your very own Lotus Flower</p>
 
-        <TintedLayeredImages
-          canvasStyle={{width: '100%'}}
-          canvasWidth={750} canvasHeight={450}
-          images={
-            [
-              {src: nc_50_glow},
-              {src: nc_00_water_glow},
-              {src: nc_10_shadow_lit},
-              {src: nc_21_outer_flower_lit, tint: this.props.colors.secondary},
-              {src: nc_31_inner_flower_lit, tint: this.props.colors.primary},
-              {src: nc_41_candle_lit},
-              {src: nc_45_candle_flame},
-              {src: nc_46_candle_glow},
-              {src: nc_61_outer_flower_front_lit},
-            ]
-          }
-        />
+        <NightLotusFlower colors={this.props.colors} />
 
         <div className="Page__fullWidthFlexContainer">
           <button className="Page__colorSelectButton" onClick={() => this.onPrimaryColorButtonClick()}>
