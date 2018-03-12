@@ -1,5 +1,6 @@
 import React from 'react';
 import TintedLayeredImages from './TintedLayeredImages';
+import nc_nile_background from '.././img/night_candle/nc_nile_background.jpg';
 import nc_00_water_glow from '.././img/night_candle/nc_00_water_glow.png';
 import nc_10_shadow_lit from '.././img/night_candle/nc_10_shadow_lit.png';
 import nc_21_outer_flower_lit from '.././img/night_candle/nc_21_outer_flower_lit.png';
@@ -18,6 +19,7 @@ export default function NightLotusFlower(props)
       canvasWidth={750} canvasHeight={450}
       images={
         [
+          {src: nc_nile_background},
           {src: nc_50_glow},
           {src: nc_00_water_glow},
           {src: nc_10_shadow_lit},
