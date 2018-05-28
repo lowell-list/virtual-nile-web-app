@@ -217,8 +217,8 @@ class App extends Component {
         return <PageFlickFlower
           screenName={this.state.screenName}
           colors={this.state.lotusColors}
+          onFlicked={() => this.changePage(PID_6_2_DREAM_CONFIRMED) } // this.submitDream(PID_6_2_DREAM_CONFIRMED) ??
         />;
-        // when done flicking, do this: this.submitDream(PID_6_2_DREAM_CONFIRMED)
       case PID_6_2_DREAM_CONFIRMED:
         return <PageDreamConfirmed
           confirmationText={`${this.state.screenName}, your dream has been added to the Virtual Nile!`}
