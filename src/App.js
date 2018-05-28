@@ -62,16 +62,26 @@ class App extends Component {
 
     let constructorModalMessage = null;
 
-    // determine location ID from query string
-    let urlParams = new URLSearchParams(window.location.search);
-    let queryLocationId = urlParams.get('locationId');
-    if(queryLocationId!=null && VALID_LOCATION_IDS.indexOf(queryLocationId)>=0) {
-      console.log("valid location ID found in query string: " + queryLocationId);
+    // determine location ID
+    let locationId = null;
+    // if global window.globalLocationId is set, use it first
+    if(window.globalLocationId!=null && VALID_LOCATION_IDS.includes(window.globalLocationId)) {
+      console.log("valid location ID found in global variable: " + window.globalLocationId);
+      locationId = window.globalLocationId;
     }
     else {
-      constructorModalMessage =
-        App.makeModalMessageObject(
-          {message:"no valid location ID found in query string",allowCancel:false});
+      // next, attempt to determine location ID from query string
+      let urlParams = new URLSearchParams(window.location.search);
+      let queryLocationId = urlParams.get('locationId');
+      if(queryLocationId!=null && VALID_LOCATION_IDS.includes(queryLocationId)) {
+        console.log("valid location ID found in query string: " + queryLocationId);
+        locationId = queryLocationId;
+      }
+      else {
+        constructorModalMessage =
+          App.makeModalMessageObject(
+            {message:"no valid location ID found",allowCancel:false});
+      }
     }
 
     // determine user ID
@@ -98,7 +108,7 @@ class App extends Component {
     // set initial state
     this.state = {
       currentPageId: currentPageId,
-      locationId: queryLocationId,
+      locationId: locationId,
       userId: userId,
       screenName: screenName,
       email: email,
