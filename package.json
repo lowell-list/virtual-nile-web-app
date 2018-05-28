@@ -1,6 +1,6 @@
 {
   "name": "virtual_nile_web_app",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "homepage": "http://nile.babasmg.com/webapp",
   "dependencies": {
