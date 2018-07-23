@@ -1,6 +1,8 @@
 ## Virtual Nile Web App
 
-###Test Deployment
+React-based Mobile Web App for Virtual Nile
+
+### Test Deployment
 
 1) In package.json, temporarily change
 
@@ -18,7 +20,7 @@ $ npm run build
 $ ./deploy_test.sh
 ```
 
-###Production Deployment
+### Production Deployment
 
 1) run
 
